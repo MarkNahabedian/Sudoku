@@ -1,8 +1,10 @@
 package base
 
 import "fmt"
+import "io"
 import "os"
 import "reflect"
+import "runtime"
 
 type Contradiction struct {
 	Cell *Cell
@@ -26,7 +28,7 @@ type Cell struct {
 	X int
 	Y int
 	Puzzle *Puzzle
-	Groups []Group
+	Groups []*Group
 	Possibilities ValueSet
 }
 
@@ -34,7 +36,7 @@ type Puzzle struct {
 	Size int
 	Grid map[GridKey]*Cell
 	Progress uint  // should be increased whenever progrress is made
-	Groups []Group
+	Groups []*Group
 	Universe ValueSet
 	Justifications []*Justification
 }
@@ -59,7 +61,7 @@ func (p *Puzzle) MakeCells(size int) *Puzzle {
 				Puzzle: p,
 				X: x,
 				Y: y,
-				Groups: make([]Group, 0),
+				Groups: make([]*Group, 0),
 				Possibilities: p.Universe,
 			}
 		}
@@ -67,7 +69,23 @@ func (p *Puzzle) MakeCells(size int) *Puzzle {
 	return p
 }
 
-func (p *Puzzle) AddGroup(g Group) *Puzzle {
+func (p *Puzzle) Show(f io.Writer) {
+	fmt.Fprintf(f, "\n")
+	for y:= 1; y <= p.Size; y++ {
+		for x:= 1; x <= p.Size; x++ {
+			c := p.Cell(x, y)
+			if b, v := c.IsSolved(); b {
+				fmt.Fprintf(f, "  %d  ", v)
+			} else {
+				fmt.Fprintf(f, " %03x ", c.Possibilities)
+			}
+		}
+		fmt.Fprintf(f, "\n")
+	}
+	fmt.Fprintf(f, "\n")
+}
+
+func (p *Puzzle) AddGroup(g *Group) *Puzzle {
 	if g.Puzzle() != p {
 		panic("Group.Puzzle() doesn't match Puzzle")
 	}
@@ -102,12 +120,23 @@ const (
 	CANT_BE
 )
 
+var JustificationOpStrings map[JustificationOp]string = map[JustificationOp]string {
+	MUST_BE: "MUST_BE",
+	CANT_BE: "CANT_BE",
+}
+
 type Justification struct {
 	Tick uint
 	Cell *Cell
 	Constraint Constraint
 	Operation JustificationOp
 	Value int
+}
+
+func (j *Justification) Pretty() string {
+	return fmt.Sprintf("%3d: Cell(%d, %d) %s %d %s",
+		j.Tick, j.Cell.X, j.Cell.Y, JustificationOpStrings[j.Operation],
+		j.Value, j.Constraint.Name())
 }
 
 func (p *Puzzle) Justify(c *Cell, op JustificationOp, value int, constraint Constraint) *Justification {
@@ -171,44 +200,34 @@ func (p *Puzzle) DoConstraints() error {
 	return nil
 }
 
-type Constraint interface {
-	Explanation() string
+type Constraint func(*Group) error
+
+func (constraint Constraint) Name() string {
+	return runtime.FuncForPC(reflect.ValueOf(constraint).Pointer()).Name()
 }
 
-type BaseConstraint struct {}
+func Given(g *Group) error { return nil }
 
-func (g *BaseConstraint) Explanation() string {
-	return reflect.TypeOf(g).Name()
-}
-
-type Given struct {
-	BaseConstraint
-}
-
-type Group interface {
-	Constraint
-	Puzzle() *Puzzle
-	Cells() []*Cell
-	DoConstraints() error
-}
-
-type BaseGroup struct {
-	BaseConstraint
+type Group struct {
 	puzzle *Puzzle
 	cells []*Cell
+	constraints []Constraint
 }
 
-func (g *BaseGroup) Puzzle() *Puzzle { return g.puzzle }
+func (g *Group) Puzzle() *Puzzle { return g.puzzle }
 
-func (g *BaseGroup) Cells() []*Cell { return g.cells }
+func (g *Group) Cells() []*Cell { return g.cells }
 
-// type UniqueValueGroup is a Group of Cells where no two cells can have the
-// same value.
-type UniqueValuesGroup struct {
-	BaseGroup
+func (g *Group) DoConstraints() error {
+	for _, constraint := range g.constraints {
+		if err := constraint(g); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
-func (g *UniqueValuesGroup) DoConstraints() error {
+func HereThenNotElsewhereConstraint(g *Group) error {
 	// If there are n cells in the group with n possibilities and those
 	// possibilities are the same then none of the other cells in the group
 	// can have any of those values.
@@ -226,7 +245,7 @@ func (g *UniqueValuesGroup) DoConstraints() error {
 			for _, c3 := range g.Cells() {
 				if c3.Possibilities != c1.Possibilities {
 					c1.Possibilities.DoValues(func(val int) {
-						c3.CantBe(val, g)
+						c3.CantBe(val, HereThenNotElsewhereConstraint)
 					})
 				}
 			}
@@ -235,12 +254,34 @@ func (g *UniqueValuesGroup) DoConstraints() error {
 	return nil
 }
 
+func NotElsewhereThenHereConstraint(g *Group) error {
+	// If a value can't be in all but one cell of a group then the one
+	// cell that can have that value must have it.
+	// Is there a generalization of this for several values?
+	valueCells := make(map[int][]*Cell)
+	for _, c := range g.Cells() {
+		c.Possibilities.DoValues(func (v int) {
+			valueCells[v] = append(valueCells[v], c)
+		})
+	}
+	for v, cells := range valueCells {
+		if len(cells) == 1 {
+			if _, err := cells[0].MustBe(v, NotElsewhereThenHereConstraint); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 func (p *Puzzle) AddLineGroups() *Puzzle {
 	addGroup := func(cells []*Cell) {
-		g := &UniqueValuesGroup{
-			BaseGroup {
-				puzzle: p,
-				cells: cells,
+		g := &Group{
+			puzzle: p,
+			cells: cells,
+			constraints: []Constraint {
+				HereThenNotElsewhereConstraint,
+				NotElsewhereThenHereConstraint,
 			},
 		}
 		p.AddGroup(g)
@@ -273,10 +314,12 @@ func (p *Puzzle) Add3x3Groups() *Puzzle {
 					block = append(block, p.Cell(x, y))
 				}
 			}
-			g := &UniqueValuesGroup{
-				BaseGroup {
-					puzzle: p,
-					cells: block,
+			g := &Group{
+				puzzle: p,
+				cells: block,
+				constraints: []Constraint {
+					HereThenNotElsewhereConstraint,
+					NotElsewhereThenHereConstraint,
 				},
 			}
 			p.AddGroup(g)
@@ -284,6 +327,3 @@ func (p *Puzzle) Add3x3Groups() *Puzzle {
 	}
 	return p
 }
-
-// If a value can't be in all but one cell of a group that the one
-// cell that can have that value must have it.

@@ -47,7 +47,7 @@ func (vs ValueSet) SetHasValue(v int, has bool) ValueSet {
 }
 
 func (vs ValueSet) DoValues(f func(int)) {
-	for v := 0; v < MaxValue; v++ {
+	for v := 1; v <= MaxValue; v++ {
 		if vs.HasValue(v) {
 			f(v)
 		}
