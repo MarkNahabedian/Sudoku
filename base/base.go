@@ -28,16 +28,16 @@ type GridKey struct {
 
 // MakeGridKey returns a GridKey for the specified X and Y position.
 func MakeGridKey(x int, y int) GridKey {
-	return GridKey{ X: x, Y: y }
+	return GridKey{X: x, Y: y}
 }
 
 // Cell represents a single cell of a Puzzle.  When the Puzzle is solved,
 // each of its Cells will contain a single value.
 type Cell struct {
-	X int
-	Y int
-	Puzzle *Puzzle
-	Groups []*Group
+	X             int
+	Y             int
+	Puzzle        *Puzzle
+	Groups        []*Group
 	Possibilities ValueSet
 }
 
@@ -45,9 +45,9 @@ type Cell struct {
 type Puzzle struct {
 	// Size is the numbner of rows and columns in the Puzzle grid.
 	Size int
-    // Grid is the grid of cells.
+	// Grid is the grid of cells.
 	Grid map[GridKey]*Cell
-    // Progress is a monotonically increasing integer.
+	// Progress is a monotonically increasing integer.
 	// It increases whenever progress is made.
 	Progress uint
 	// Groups is a slice conbtaining all of the Groups of this Puzzle.
@@ -71,16 +71,16 @@ func (p *Puzzle) Cell(x, y int) *Cell {
 func (p *Puzzle) MakeCells(size int) *Puzzle {
 	p.Size = size
 	for i := 1; i <= size; i++ {
-		 p.Universe = p.Universe.SetHasValue(i, true)
+		p.Universe = p.Universe.SetHasValue(i, true)
 	}
 	p.Grid = make(map[GridKey]*Cell)
 	for x := 1; x <= size; x++ {
 		for y := 1; y <= size; y++ {
 			p.Grid[MakeGridKey(x, y)] = &Cell{
-				Puzzle: p,
-				X: x,
-				Y: y,
-				Groups: make([]*Group, 0),
+				Puzzle:        p,
+				X:             x,
+				Y:             y,
+				Groups:        make([]*Group, 0),
 				Possibilities: p.Universe,
 			}
 		}
@@ -90,8 +90,8 @@ func (p *Puzzle) MakeCells(size int) *Puzzle {
 
 func (p *Puzzle) Show(f io.Writer) {
 	fmt.Fprintf(f, "\n")
-	for y:= 1; y <= p.Size; y++ {
-		for x:= 1; x <= p.Size; x++ {
+	for y := 1; y <= p.Size; y++ {
+		for x := 1; x <= p.Size; x++ {
 			c := p.Cell(x, y)
 			if b, v := c.IsSolved(); b {
 				fmt.Fprintf(f, "  %d  ", v)
@@ -118,9 +118,10 @@ func (p *Puzzle) AddGroup(g *Group) *Puzzle {
 func (c *Cell) IsSolved() (bool, int) {
 	value := -1
 	count := 0
-	c.Possibilities.DoValues(func (v int) {
+	c.Possibilities.DoValues(func(v int) bool {
 		count += 1
 		value = v
+		return true
 	})
 	if count == 1 {
 		return true, value
@@ -134,22 +135,23 @@ func (c *Cell) HasPossibleValue(v int) bool {
 }
 
 type JustificationOp int
+
 const (
 	MUST_BE JustificationOp = iota
 	CANT_BE
 )
 
-var JustificationOpStrings map[JustificationOp]string = map[JustificationOp]string {
+var JustificationOpStrings map[JustificationOp]string = map[JustificationOp]string{
 	MUST_BE: "MUST_BE",
 	CANT_BE: "CANT_BE",
 }
 
 type Justification struct {
-	Tick uint
-	Cell *Cell
+	Tick       uint
+	Cell       *Cell
 	Constraint Constraint
-	Operation JustificationOp
-	Value int
+	Operation  JustificationOp
+	Value      int
 }
 
 func (j *Justification) Pretty() string {
@@ -159,12 +161,12 @@ func (j *Justification) Pretty() string {
 }
 
 func (p *Puzzle) Justify(c *Cell, op JustificationOp, value int, constraint Constraint) *Justification {
-	j := &Justification {
-		Tick: p.Progress,
-		Cell: c,
+	j := &Justification{
+		Tick:       p.Progress,
+		Cell:       c,
 		Constraint: constraint,
-		Operation: op,
-		Value: value,
+		Operation:  op,
+		Value:      value,
 	}
 	p.Progress += 1
 	p.Justifications = append(p.Justifications, j)
@@ -192,7 +194,7 @@ func (c *Cell) CantBe(v int, constraint Constraint) *Cell {
 func (c *Cell) MustBe(v int, constraint Constraint) (*Cell, error) {
 	old := c.Possibilities
 	if !c.HasPossibleValue(v) {
-		return c, &Contradiction{ Cell: c, Issue: fmt.Sprintf("%d is not a possible Value for MustBe", v) }
+		return c, &Contradiction{Cell: c, Issue: fmt.Sprintf("%d is not a possible Value for MustBe", v)}
 	}
 	c.Possibilities = NewValueSet([]int{v})
 	if c.Possibilities.IsEmpty() {
@@ -227,8 +229,8 @@ type Constraint interface {
 }
 
 type FunctionConstraint struct {
-	 name string
-	 constraint func(*Group) error
+	name       string
+	constraint func(*Group) error
 }
 
 func (constraint FunctionConstraint) Name() string {
@@ -239,8 +241,8 @@ func (constraint FunctionConstraint) DoConstraint(g *Group) error {
 	return constraint.constraint(g)
 }
 
-var Given = FunctionConstraint {
-	name: "Given",
+var Given = FunctionConstraint{
+	name:       "Given",
 	constraint: (func(g *Group) error { return nil }),
 }
 
@@ -248,8 +250,8 @@ var Given = FunctionConstraint {
 // applies, for example a row in a sudoku whose cells can not contain
 // matching values.
 type Group struct {
-	puzzle *Puzzle
-	cells []*Cell
+	puzzle      *Puzzle
+	cells       []*Cell
 	constraints []Constraint
 }
 
@@ -279,10 +281,10 @@ func init() {
 		// possibilities are the same then none of the other cells in the group
 		// can have any of those values.
 		for i, c1 := range g.Cells() {
-			if c1.Possibilities.Len() > c1.Puzzle.Universe.Len() - i {
+			if c1.Possibilities.Len() > c1.Puzzle.Universe.Len()-i {
 				continue
 			}
-			count := 0  // How many of the remaining cells have the same Possibilities
+			count := 0 // How many of the remaining cells have the same Possibilities
 			for _, c2 := range g.Cells()[i:] {
 				if c1.Possibilities == c2.Possibilities {
 					count += 1
@@ -291,8 +293,9 @@ func init() {
 			if count == c1.Possibilities.Len() {
 				for _, c3 := range g.Cells() {
 					if c3.Possibilities != c1.Possibilities {
-						c1.Possibilities.DoValues(func(val int) {
+						c1.Possibilities.DoValues(func(val int) bool {
 							c3.CantBe(val, HereThenNotElsewhereConstraint)
+							return true
 						})
 					}
 				}
@@ -314,8 +317,9 @@ func init() {
 		// Is there a generalization of this for several values?
 		valueCells := make(map[int][]*Cell)
 		for _, c := range g.Cells() {
-			c.Possibilities.DoValues(func (v int) {
+			c.Possibilities.DoValues(func(v int) bool {
 				valueCells[v] = append(valueCells[v], c)
+				return true
 			})
 		}
 		for v, cells := range valueCells {
@@ -335,8 +339,8 @@ func (p *Puzzle) AddLineGroups() *Puzzle {
 	addGroup := func(cells []*Cell) {
 		g := &Group{
 			puzzle: p,
-			cells: cells,
-			constraints: []Constraint {
+			cells:  cells,
+			constraints: []Constraint{
 				HereThenNotElsewhereConstraint,
 				NotElsewhereThenHereConstraint,
 			},
@@ -374,8 +378,8 @@ func (p *Puzzle) Add3x3Groups() *Puzzle {
 			}
 			g := &Group{
 				puzzle: p,
-				cells: block,
-				constraints: []Constraint {
+				cells:  block,
+				constraints: []Constraint{
 					HereThenNotElsewhereConstraint,
 					NotElsewhereThenHereConstraint,
 				},
@@ -384,4 +388,164 @@ func (p *Puzzle) Add3x3Groups() *Puzzle {
 		}
 	}
 	return p
+}
+
+type KenKenOperator struct {
+	// Symbol is the name of the operator.
+	Symbol string
+	// Test returns true if the constraint is satisfied.
+	Test func([]int, int) bool
+}
+
+var KenKenOperators []KenKenOperator = []KenKenOperator{
+	{
+		Symbol: "Addition",
+		// OrderMatters: false,
+		/*
+			Function: func(values []int) int {
+				sum := 0
+				for _, v := range values {
+					sum += v
+				}
+				return sum
+			}
+		*/
+		Test: func(values []int, expect int) bool {
+			sum := 0
+			for _, v := range values {
+				sum += v
+			}
+			return sum == expect
+		},
+	},
+	{
+		Symbol: "Multiplication",
+		Test: func(values []int, expect int) bool {
+			product := 1
+			for _, v := range values {
+				product *= v
+			}
+			return product == expect
+		},
+	},
+	{
+		Symbol: "Subtraction",
+		Test: func(values []int, expect int) bool {
+			for sense := 0; sense < 2^len(values); sense++ {
+				accumulator := 0
+				for index, value := range values {
+					if sense&(1<<uint(index)) == 0 {
+						accumulator += value
+					} else {
+						accumulator += -value
+					}
+				}
+				if accumulator == expect {
+					return true
+				}
+			}
+			return false
+		},
+	},
+}
+
+// GetKenKenOperator returns the KenKenOperator with the specified name,
+// or nil if none is found.
+func GetKenKenOperator(name string) *KenKenOperator {
+	for _, o := range KenKenOperators {
+		if o.Symbol == name {
+			return &o
+		}
+	}
+	return nil
+}
+
+type KenKenCageConstraint struct {
+	name      string
+	operators []*KenKenOperator
+	expect    int
+}
+
+func (c *KenKenCageConstraint) makeName() string {
+	opString := ""
+	for _, op := range c.operators {
+		if opString != "" {
+			opString += ", "
+		}
+		opString += op.Symbol
+	}
+	return opString
+}
+
+func (c *KenKenCageConstraint) Name() string {
+	if c.name == "" {
+		c.name = c.makeName()
+	}
+	return c.name
+}
+
+func (c *KenKenCageConstraint) findPossibleValueSets() {
+	// possibilities := [][]int{}
+	// Need group size
+}
+
+func (c *KenKenCageConstraint) DoConstraint(g *Group) error {
+	/*
+	   We might be able to do union and intersection of value sets when updating cells.
+	*/
+
+	cell_count := len(g.cells)
+	cell_value_indices := make([]int, cell_count, cell_count)
+	successful_possibilities := [][]int{}
+	done := false
+	for !done {
+		// Test the current cell values
+		values := make([]int, cell_count, cell_count)
+		for i := 0; i < cell_count; i++ {
+			values[i] = g.cells[i].Possibilities.Get(cell_value_indices[i])
+		}
+		for _, o := range c.operators {
+			if o.Test(values, c.expect) {
+				successful_possibilities = append(successful_possibilities, values)
+			}
+		}
+		// Next cell value
+		for cell_index := 0; true; cell_index++ {
+			if cell_index >= cell_count {
+				done = true
+				break
+			}
+			cell_value_indices[cell_index] += 1
+			if cell_value_indices[cell_index] < g.Cells()[cell_index].Possibilities.Len() {
+				break
+			}
+			cell_value_indices[cell_index] = 0
+		}
+	}
+	// Eliminate each cell value possibility that does not appear in
+	// any of the acceptable combinations.
+	for cell_index := 0; cell_index < cell_count; cell_index++ {
+		cell := g.Cells()[cell_index]
+		cell.Possibilities.DoValues(func(p int) bool {
+			found := false
+			for _, sp := range successful_possibilities {
+				if sp[cell_index] == p {
+					found = true
+					break
+				}
+			}
+			if !found {
+				cell.CantBe(p, c)
+			}
+			return true
+		})
+	}
+	return nil
+}
+
+func MakeKenKenConstraint(operators []*KenKenOperator, expect int) Constraint {
+	return &KenKenCageConstraint{
+		operators: operators,
+		expect:    expect,
+	}
 }

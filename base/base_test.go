@@ -29,15 +29,15 @@ func TestRowColumn(t *testing.T) {
 	p.Cell(1, 1).MustBe(1, Given)
 	p.Cell(1, 2).MustBe(2, Given)
 
-/*
-	if b, v := p.Cell(1, 1).IsSolved(); b {
-		if v != 1 {
-			t.Errorf("IsSolved returned wring value")
+	/*
+		if b, v := p.Cell(1, 1).IsSolved(); b {
+			if v != 1 {
+				t.Errorf("IsSolved returned wring value")
+			}
+		} else {
+			t.Errorf("IsSolved should have returned true: %d", p.Cell(1, 1).Possibilities)
 		}
-	} else {
-		t.Errorf("IsSolved should have returned true: %d", p.Cell(1, 1).Possibilities)
-	}
-*/
+	*/
 	if err := p.DoConstraints(); err != nil {
 		t.Errorf("Error during DoConstraints: %s", err.Error())
 	}
@@ -69,7 +69,7 @@ func TestSudoku1(t *testing.T) {
 	p.AddLineGroups()
 	p.Add3x3Groups()
 	given := func(x int, y int, value int) {
-		p.Cell(x, y).MustBe(value, Given)	
+		p.Cell(x, y).MustBe(value, Given)
 	}
 	given(3, 1, 2)
 	given(4, 1, 8)
@@ -129,7 +129,7 @@ func TestSudoku2(t *testing.T) {
 	p.AddLineGroups()
 	p.Add3x3Groups()
 	given := func(x int, y int, value int) {
-		p.Cell(x, y).MustBe(value, Given)	
+		p.Cell(x, y).MustBe(value, Given)
 	}
 	given(2, 1, 3)
 	given(5, 1, 2)
@@ -187,7 +187,7 @@ func TestSudoku3(t *testing.T) {
 	p.AddLineGroups()
 	p.Add3x3Groups()
 	given := func(x int, y int, value int) {
-		p.Cell(x, y).MustBe(value, Given)	
+		p.Cell(x, y).MustBe(value, Given)
 	}
 	given(1, 1, 8)
 	given(3, 1, 5)
@@ -243,7 +243,7 @@ func TestSudokuOnly17Given(t *testing.T) {
 	p.AddLineGroups()
 	p.Add3x3Groups()
 	given := func(x int, y int, value int) {
-		p.Cell(x, y).MustBe(value, Given)	
+		p.Cell(x, y).MustBe(value, Given)
 	}
 
 	given(4, 1, 7)
@@ -279,5 +279,38 @@ func TestSudokuOnly17Given(t *testing.T) {
 	for _, j := range p.Justifications {
 		t.Log(j.Pretty())
 	}
-	
+}
+
+func TestKenKenCageConstraint(t *testing.T) {
+	p := &Puzzle{}
+	p.MakeCells(6)
+	p.AddLineGroups()
+
+	g := &Group{
+		puzzle: p,
+		cells:  []*Cell{p.Cell(1, 1), p.Cell(1, 2)},
+		constraints: []Constraint{
+			MakeKenKenConstraint([]*KenKenOperator{GetKenKenOperator("Multiplication")}, 6),
+		},
+	}
+	p.AddGroup(g)
+
+	show := func() {
+		var b bytes.Buffer
+		p.Show(&b)
+		t.Log(b.String())
+	}
+
+	show()
+
+	if err := p.DoConstraints(); err != nil {
+		t.Errorf("Error during DoConstraints: %s", err.Error())
+	}
+	show()
+	for _, j := range p.Justifications {
+		t.Log(j.Pretty())
+	}
+	if want, got := NewValueSet([]int{1, 2, 3, 6}), p.Cell(1, 1).Possibilities; got != want {
+		t.Errorf("KenKen cage constraint failed.")
+	}
 }
