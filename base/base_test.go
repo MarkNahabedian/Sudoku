@@ -237,50 +237,6 @@ func TestSudoku3(t *testing.T) {
 	}
 }
 
-func TestSudokuOnly17Given(t *testing.T) {
-	p := &Puzzle{}
-	p.MakeCells(9)
-	p.AddLineGroups()
-	p.Add3x3Groups()
-	given := func(x int, y int, value int) {
-		p.Cell(x, y).MustBe(value, Given)
-	}
-
-	given(4, 1, 7)
-	given(1, 2, 1)
-	given(4, 3, 4)
-	given(5, 3, 3)
-	given(7, 3, 2)
-	given(9, 4, 6)
-	given(4, 5, 5)
-	given(6, 5, 9)
-	given(7, 6, 4)
-	given(8, 6, 1)
-	given(9, 6, 8)
-	given(5, 7, 8)
-	given(6, 7, 1)
-	given(3, 8, 2)
-	given(8, 8, 5)
-	given(2, 9, 4)
-	given(7, 9, 3)
-
-	show := func() {
-		var b bytes.Buffer
-		p.Show(&b)
-		t.Log(b.String())
-	}
-
-	show()
-
-	if err := p.DoConstraints(); err != nil {
-		t.Errorf("Error during DoConstraints: %s", err.Error())
-	}
-	show()
-	for _, j := range p.Justifications {
-		t.Log(j.Pretty())
-	}
-}
-
 func TestKenKenCageConstraint(t *testing.T) {
 	p := &Puzzle{}
 	p.MakeCells(6)

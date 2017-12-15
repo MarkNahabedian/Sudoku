@@ -27,6 +27,7 @@ type GridKey struct {
 }
 
 // MakeGridKey returns a GridKey for the specified X and Y position.
+// The top left cell is in row 1, column 1.
 func MakeGridKey(x int, y int) GridKey {
 	return GridKey{X: x, Y: y}
 }
