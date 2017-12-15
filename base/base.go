@@ -485,11 +485,6 @@ func (c *KenKenCageConstraint) Name() string {
 	return c.name
 }
 
-func (c *KenKenCageConstraint) findPossibleValueSets() {
-	// possibilities := [][]int{}
-	// Need group size
-}
-
 func (c *KenKenCageConstraint) DoConstraint(g *Group) error {
 	/*
 	   We might be able to do union and intersection of value sets when updating cells.
