@@ -1,5 +1,7 @@
 package base
 
+import "fmt"
+
 // ValueSet represents a set of values that appear in a sudoku Cell.
 type ValueSet uint16
 
@@ -79,16 +81,27 @@ func (vs ValueSet) DoValues(f func(int) bool) {
 	}
 }
 
-// Get returns the indexth value from the ValueSet.  Get panics if index
-// is out of range (0 based).
-func (vs ValueSet) Get(index int) int {
+func (vs ValueSet) String(separator string) string {
+	s := ""
+	vs.DoValues(func(v int) bool {
+		if s != "" {
+			s += separator
+		}
+		s += fmt.Sprintf("%d", v)
+		return true
+	})
+	return s
+}
+
+// Get returns the indexth value from the ValueSet.
+func (vs ValueSet) Get(index int) (int, error) {
 	count := 0
 	value := -1
 	if index < 0 {
-		panic("Index out of range")
+		panic(fmt.Sprintf("Index %d out of range", index))
 	}
 	if index >= vs.Len() {
-		panic("Index out of range")
+		return 0, fmt.Errorf("Index %d out of range, 0x%x", index, vs)
 	}
 	f := func(v int) bool {
 		if index == count {
@@ -99,5 +112,15 @@ func (vs ValueSet) Get(index int) int {
 		return true
 	}
 	vs.DoValues(f)
-	return value
+	return value, nil
+}
+
+// MustGet returns the indexth value from the ValueSet.
+// MustGet panics if index is out of range.
+func (vs ValueSet) MustGet(index int) int {
+	v, err := vs.Get(index)
+	if err != nil {
+		panic(err)
+	}
+    return v
 }

@@ -65,7 +65,7 @@ func TestGet(t *testing.T) {
 	values := []int{2, 4}
 	vs := NewValueSet(values)
 	test_index := func(index int) {
-		if want, got := values[index], vs.Get(index); got != want {
+		if want, got := values[index], vs.MustGet(index); got != want {
 			t.Errorf("At index %d: expected %d, got %d.", index, want, got)
 		}
 	}

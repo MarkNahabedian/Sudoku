@@ -60,6 +60,29 @@ type Puzzle struct {
 	Justifications []*Justification
 }
 
+func (p *Puzzle) CheckIntegrity() []error {
+	errors := []error{}
+	for x := 1; x <= p.Size; x++ {
+		for y := 1; y <= p.Size; y++ {
+			key := MakeGridKey(x, y)
+			cell := p.Grid[key]
+			if x != cell.X || y != cell.Y {
+				errors = append(errors, fmt.Errorf("Grid check failed: key %d, %d, cell %d, %d",
+					x, y, cell.X, cell.Y))
+			}
+			if p != cell.Puzzle {
+				errors = append(errors, fmt.Errorf("Cell Puzzle mismatch at %d, %d", cell.X, cell.Y))
+			}
+		}
+	}
+	for i, g := range p.Groups {
+		if g.puzzle != p {
+			errors = append(errors, fmt.Errorf("Group %d's puzzle is wrong", i))
+		}
+	}
+	return errors
+}
+
 // Cell returns the Cell at the specified x and y position.
 func (p *Puzzle) Cell(x, y int) *Cell {
 	c := p.Grid[MakeGridKey(x, y)]
@@ -69,11 +92,17 @@ func (p *Puzzle) Cell(x, y int) *Cell {
 	return c
 }
 
+func Universe(size int) ValueSet {
+	vs := NewValueSet([]int{})
+	for i := 1; i <= size; i++ {
+		vs = vs.SetHasValue(i, true)
+	}
+	return vs
+}
+
 func (p *Puzzle) MakeCells(size int) *Puzzle {
 	p.Size = size
-	for i := 1; i <= size; i++ {
-		p.Universe = p.Universe.SetHasValue(i, true)
-	}
+	p.Universe = Universe(size)
 	p.Grid = make(map[GridKey]*Cell)
 	for x := 1; x <= size; x++ {
 		for y := 1; y <= size; y++ {
@@ -87,6 +116,15 @@ func (p *Puzzle) MakeCells(size int) *Puzzle {
 		}
 	}
 	return p
+}
+
+func (p *Puzzle) IsSolved() bool {
+	for _, cell := range p.Grid {
+		if solved, _ := cell.IsSolved(); !solved {
+			return false
+		}
+	}
+	return true
 }
 
 func (p *Puzzle) Show(f io.Writer) {
@@ -174,9 +212,13 @@ func (p *Puzzle) Justify(c *Cell, op JustificationOp, value int, constraint Cons
 	return j
 }
 
-func (c *Cell) CantBe(v int, constraint Constraint) *Cell {
+func (c *Cell) CantBe(v int, constraint Constraint) (*Cell, error) {
 	old := c.Possibilities
 	c.Possibilities = c.Possibilities.SetHasValue(v, false)
+	if c.Possibilities.Len() == 0 {
+		return c, fmt. Errorf("No more possibilities after elimination of value %d from cell(%d, %d) by constraint %s",
+			v, c.X, c.Y, constraint.Name())
+	}
 	if c.Possibilities != old {
 		c.Puzzle.Justify(c, CANT_BE, v, constraint)
 		if c.Possibilities.IsEmpty() {
@@ -189,7 +231,7 @@ func (c *Cell) CantBe(v int, constraint Constraint) *Cell {
 			}
 		}
 	}
-	return c
+	return c, nil
 }
 
 func (c *Cell) MustBe(v int, constraint Constraint) (*Cell, error) {
@@ -256,9 +298,45 @@ type Group struct {
 	constraints []Constraint
 }
 
-func (g *Group) Puzzle() *Puzzle { return g.puzzle }
+func NewGroup(p *Puzzle) *Group {
+	return &Group{ puzzle: p }
+}
+
+func (g *Group) Puzzle() *Puzzle {
+	// Kludge!
+	if g.puzzle == nil {
+		g.puzzle = g.cells[0].Puzzle
+	}
+	return g.puzzle
+}
 
 func (g *Group) Cells() []*Cell { return g.cells }
+
+func (g *Group) Constraints() []Constraint {
+	return g.constraints
+}
+
+func (g *Group) HasCell(cell *Cell) bool {
+	for _, c := range g.cells {
+		if c == cell {
+			return true
+		}
+	}
+	return false
+}
+
+func (g *Group) AddCell(cell *Cell) *Group {
+	if !g.HasCell(cell) {
+		g.cells = append(g.cells, cell)
+		cell.Groups = append(cell.Groups, g)
+	}
+	return g
+}
+
+func (g *Group) AddConstraint(c Constraint) *Group {
+	g.constraints = append(g.constraints, c)
+	return g
+}
 
 // DoConstraints applies the Group's constraints.
 func (g *Group) DoConstraints() error {
@@ -295,7 +373,10 @@ func init() {
 				for _, c3 := range g.Cells() {
 					if c3.Possibilities != c1.Possibilities {
 						c1.Possibilities.DoValues(func(val int) bool {
-							c3.CantBe(val, HereThenNotElsewhereConstraint)
+							_, err := c3.CantBe(val, HereThenNotElsewhereConstraint)
+							if err != nil {
+								panic(err)
+							}
 							return true
 						})
 					}
@@ -432,7 +513,9 @@ var KenKenOperators []KenKenOperator = []KenKenOperator{
 	{
 		Symbol: "Subtraction",
 		Test: func(values []int, expect int) bool {
-			for sense := 0; sense < 2^len(values); sense++ {
+			// Consider all possible conbinations of whether any given value
+			// is added or subtracted.
+			for sense := 0; sense < 1 << uint(len(values)); sense++ {
 				accumulator := 0
 				for index, value := range values {
 					if sense&(1<<uint(index)) == 0 {
@@ -448,6 +531,24 @@ var KenKenOperators []KenKenOperator = []KenKenOperator{
 			return false
 		},
 	},
+}
+
+var KenKenOperatorSymbols = make(map[string]*KenKenOperator)
+
+func init() {
+	KenKenOperatorSymbols["+"] = MustKenKenOperator("Addition")
+    KenKenOperatorSymbols["-"] = MustKenKenOperator("Subtraction")
+	KenKenOperatorSymbols["*"] = MustKenKenOperator("Multiplication")
+	// KenKenOperatorSymbols["/"] = MustKenKenOperator("Division")
+}
+
+// MustKenKenOperator is like GetKenKenOperator but panics if the operator isn't found.
+func MustKenKenOperator(name string) *KenKenOperator {
+	o := GetKenKenOperator(name)
+	if o == nil {
+		panic(fmt.Sprintf("No KenKenOperator named %s", name))
+	}
+	return o
 }
 
 // GetKenKenOperator returns the KenKenOperator with the specified name,
@@ -475,6 +576,7 @@ func (c *KenKenCageConstraint) makeName() string {
 		}
 		opString += op.Symbol
 	}
+	opString = fmt.Sprintf("%s = %d", opString, c.expect)
 	return opString
 }
 
@@ -491,14 +593,18 @@ func (c *KenKenCageConstraint) DoConstraint(g *Group) error {
 	*/
 
 	cell_count := len(g.cells)
+	// cell_value_indices contains an index into the ValueSet of each Cell of the Group.
+	// It counts through each possaible value of each cell.
 	cell_value_indices := make([]int, cell_count, cell_count)
 	successful_possibilities := [][]int{}
 	done := false
 	for !done {
 		// Test the current cell values
+		// Values is a vector containing one value from each Cell of the Group,
+		//  as indexed by cell_value_indices.
 		values := make([]int, cell_count, cell_count)
-		for i := 0; i < cell_count; i++ {
-			values[i] = g.cells[i].Possibilities.Get(cell_value_indices[i])
+		for cell_index := 0; cell_index < cell_count; cell_index++ {
+			values[cell_index] = g.cells[cell_index].Possibilities.MustGet(cell_value_indices[cell_index])
 		}
 		for _, o := range c.operators {
 			if o.Test(values, c.expect) {
@@ -506,6 +612,7 @@ func (c *KenKenCageConstraint) DoConstraint(g *Group) error {
 			}
 		}
 		// Next cell value
+		// Increment cell_value_indices[0], carrying into higher indices as appropriate.
 		for cell_index := 0; true; cell_index++ {
 			if cell_index >= cell_count {
 				done = true
@@ -518,6 +625,7 @@ func (c *KenKenCageConstraint) DoConstraint(g *Group) error {
 			cell_value_indices[cell_index] = 0
 		}
 	}
+
 	// Eliminate each cell value possibility that does not appear in
 	// any of the acceptable combinations.
 	for cell_index := 0; cell_index < cell_count; cell_index++ {
@@ -531,7 +639,11 @@ func (c *KenKenCageConstraint) DoConstraint(g *Group) error {
 				}
 			}
 			if !found {
-				cell.CantBe(p, c)
+				_, err := cell.CantBe(p, c)
+				if err != nil {
+
+					panic(err)
+				}
 			}
 			return true
 		})

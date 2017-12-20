@@ -119,6 +119,9 @@ func TestSudoku1(t *testing.T) {
 	for _, j := range p.Justifications {
 		t.Log(j.Pretty())
 	}
+	if !p.IsSolved() {
+		t.Errorf("Not solved")
+	}
 }
 
 func TestSudoku2(t *testing.T) {
@@ -177,6 +180,9 @@ func TestSudoku2(t *testing.T) {
 	for _, j := range p.Justifications {
 		t.Log(j.Pretty())
 	}
+	if !p.IsSolved() {
+		t.Errorf("Not solved")
+	}
 }
 
 func TestSudoku3(t *testing.T) {
@@ -234,6 +240,9 @@ func TestSudoku3(t *testing.T) {
 	show()
 	for _, j := range p.Justifications {
 		t.Log(j.Pretty())
+	}
+	if !p.IsSolved() {
+		t.Errorf("Not solved")
 	}
 }
 
