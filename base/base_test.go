@@ -246,7 +246,7 @@ func TestSudoku3(t *testing.T) {
 	}
 }
 
-func TestKenKenCageConstraint(t *testing.T) {
+func TestKenKenMultiplicationConstraint(t *testing.T) {
 	p := &Puzzle{}
 	p.MakeCells(6)
 	p.AddLineGroups()
@@ -256,6 +256,40 @@ func TestKenKenCageConstraint(t *testing.T) {
 		cells:  []*Cell{p.Cell(1, 1), p.Cell(1, 2)},
 		constraints: []Constraint{
 			MakeKenKenConstraint([]*KenKenOperator{GetKenKenOperator("Multiplication")}, 6),
+		},
+	}
+	p.AddGroup(g)
+
+	show := func() {
+		var b bytes.Buffer
+		p.Show(&b)
+		t.Log(b.String())
+	}
+
+	show()
+
+	if err := p.DoConstraints(); err != nil {
+		t.Errorf("Error during DoConstraints: %s", err.Error())
+	}
+	show()
+	for _, j := range p.Justifications {
+		t.Log(j.Pretty())
+	}
+	if want, got := NewValueSet([]int{1, 2, 3, 6}), p.Cell(1, 1).Possibilities; got != want {
+		t.Errorf("KenKen cage constraint failed.")
+	}
+}
+
+func TestKenKenDivisioinConstraint(t *testing.T) {
+	p := &Puzzle{}
+	p.MakeCells(6)
+	p.AddLineGroups()
+
+	g := &Group{
+		puzzle: p,
+		cells:  []*Cell{p.Cell(1, 1), p.Cell(1, 2)},
+		constraints: []Constraint{
+			MakeKenKenConstraint([]*KenKenOperator{GetKenKenOperator("Division")}, 3),
 		},
 	}
 	p.AddGroup(g)

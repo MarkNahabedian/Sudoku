@@ -4,6 +4,7 @@ package base
 
 import "fmt"
 import "io"
+import "math/big"
 import "os"
 
 // Contradiction is the type of error that is returned if an operation
@@ -515,7 +516,7 @@ var KenKenOperators []KenKenOperator = []KenKenOperator{
 		Test: func(values []int, expect int) bool {
 			// Consider all possible conbinations of whether any given value
 			// is added or subtracted.
-			for sense := 0; sense < 1 << uint(len(values)); sense++ {
+			for sense := 1; sense < (1 << uint(len(values))) - 1; sense++ {
 				accumulator := 0
 				for index, value := range values {
 					if sense&(1<<uint(index)) == 0 {
@@ -531,6 +532,34 @@ var KenKenOperators []KenKenOperator = []KenKenOperator{
 			return false
 		},
 	},
+	{
+		Symbol: "Division",
+		Test: func(values []int, expect int) bool {
+			ratvalues := make([]*big.Rat, len(values), len(values))
+            for i := 0; i < len(values); i++ {
+				ratvalues[i] = big.NewRat(int64(values[i]), 1)
+			}
+			ratexpect := big.NewRat(int64(expect), 1)
+			// Consider all possible conbinations of whether any given value
+			// is multiplied by or divided by.
+            // We needn't consider the all multiplication case nor the all
+			// division case.
+			for sense := 1; sense < (1 << uint(len(values))) - 1; sense++ {
+				result := big.NewRat(1, 1)
+				for index, value := range ratvalues {
+					if sense&(1<<uint(index)) == 0 {
+						result.Mul(result, value)
+					} else {
+						result.Quo(result, value)
+					}
+				}
+				if result.Cmp(ratexpect) == 0 {
+					return true
+				}
+			}
+			return false
+		},
+	},
 }
 
 var KenKenOperatorSymbols = make(map[string]*KenKenOperator)
@@ -539,7 +568,7 @@ func init() {
 	KenKenOperatorSymbols["+"] = MustKenKenOperator("Addition")
     KenKenOperatorSymbols["-"] = MustKenKenOperator("Subtraction")
 	KenKenOperatorSymbols["*"] = MustKenKenOperator("Multiplication")
-	// KenKenOperatorSymbols["/"] = MustKenKenOperator("Division")
+	KenKenOperatorSymbols["/"] = MustKenKenOperator("Division")
 }
 
 // MustKenKenOperator is like GetKenKenOperator but panics if the operator isn't found.
