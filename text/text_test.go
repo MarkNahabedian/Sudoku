@@ -2,7 +2,6 @@ package text
 
 import "testing"
 import "bytes"
-import "io"
 
 func TestSudokuOnly17Given(t *testing.T) {
 	p, err := TextToSudoku(`
@@ -70,7 +69,7 @@ func TestDiscoParty(t *testing.T) {
 		l:  15 *
 	`)
 
-	if err != nil && err != io.EOF {
+	if err != nil {
 		t.Errorf("%s", err)
 	}
 

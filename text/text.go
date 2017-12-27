@@ -4,6 +4,7 @@ package text
 
 import "bufio"
 import "fmt"
+import "io"
 import "regexp"
 import "strconv"
 import "strings"
@@ -82,7 +83,6 @@ func TextToKenKen(text string) (*base.Puzzle, error) {
 	cell_values := make(map[*base.Cell]int)
 	size := 0
 	last_cell_row := 0
-	var constraints_start int
 
 	cell := func(x, y int) *base.Cell {
 		key := base.MakeGridKey(x, y)
@@ -120,7 +120,13 @@ func TextToKenKen(text string) (*base.Puzzle, error) {
 		column += 1
 	}
 
-	for index, c := range text {
+	reader := bufio.NewReader(strings.NewReader(text))
+
+	for {
+		c, _, err := reader.ReadRune()
+        if err != nil {
+			return p, err
+		}
 		switch c {
 		case ' ', '\t':
 			// Ignore
@@ -132,7 +138,6 @@ func TextToKenKen(text string) (*base.Puzzle, error) {
 			}
 			// Two empty lines means the grid is done.
 			if row-last_cell_row >= 2 {
-				constraints_start = index
 				goto grid_done
 			}
 
@@ -173,10 +178,12 @@ grid_done:
 	}
 
 	// Now read the cage constraints.
-	reader := bufio.NewReader(strings.NewReader(text[constraints_start:]))
 	for {
 		s, err := reader.ReadString('\n')
 		if err != nil {
+			if err == io.EOF {
+				return p, nil
+			}
 			return p, err
 		}
 		m := CageConstraintRegexp.FindStringSubmatch(s)
