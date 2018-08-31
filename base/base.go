@@ -686,3 +686,13 @@ func MakeKenKenConstraint(operators []*KenKenOperator, expect int) Constraint {
 		expect:    expect,
 	}
 }
+
+
+func NewEmptySudoku() *Puzzle {
+	p := &Puzzle{}
+	p.MakeCells(9)
+	p.AddLineGroups()
+	p.Add3x3Groups()
+	return p
+}
+

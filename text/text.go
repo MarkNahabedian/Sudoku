@@ -17,10 +17,7 @@ import "sudoku/base"
 // values and dashes representing empty cells.  Spaces and tabs are ignored.
 // Newlines represent breaks between rows.
 func TextToSudoku(text string) (*base.Puzzle, error) {
-	p := &base.Puzzle{}
-	p.MakeCells(9)
-	p.AddLineGroups()
-	p.Add3x3Groups()
+	p := base.NewEmptySudoku()
 
 	row := 1
 	column := 1
