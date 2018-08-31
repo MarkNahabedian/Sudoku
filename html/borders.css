@@ -1,0 +1,61 @@
+
+table {
+	table-layout: fixed;
+	border-collapse: collapse;
+}
+
+tbody {
+	margin -4px;
+	border-width: 4px;
+	padding: 0px;
+}
+
+tr {
+	margin: -4px;
+	border-width: 0px;
+	padding: 0px;
+}
+
+td {
+	margin: -4px;
+	border-color: black;
+	border-style: solid;
+	width: calc(100%/9);
+	height: calc(100%/9);
+	text-align: center;
+}
+
+.top {
+	padding-top: 1px;
+	border-top-width: 4px;
+}
+
+.vmiddle {
+	padding-top: 4px;
+	border-top-width: 1px;
+	padding-bottom-width: 4px;
+	border-bottom-width: 1px;
+}
+
+.bottom {
+	padding-bottom: 1px;
+	border-bottom-width: 4px;
+}
+
+.left {
+	padding-left: 1px;
+	border-left-width: 4px;
+}
+
+.hmiddle {
+	padding-left: 4px;
+	border-left-width: 1px;
+	padding-right-width: 4px;
+	border-right-width: 1px;
+}
+
+.right {
+	padding-right: 1px;
+	border-right-width: 4px;
+}
+
