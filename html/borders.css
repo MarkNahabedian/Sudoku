@@ -17,6 +17,8 @@ tr {
 }
 
 td {
+	padding: 5px;
+	font-weight: bolder;
 	margin: -4px;
 	border-color: black;
 	border-style: solid;
@@ -26,36 +28,28 @@ td {
 }
 
 .top {
-	padding-top: 1px;
-	border-top-width: 4px;
+	border-top-width: 3px;
 }
 
 .vmiddle {
-	padding-top: 4px;
 	border-top-width: 1px;
-	padding-bottom-width: 4px;
 	border-bottom-width: 1px;
 }
 
 .bottom {
-	padding-bottom: 1px;
-	border-bottom-width: 4px;
+	border-bottom-width: 3px;
 }
 
 .left {
-	padding-left: 1px;
-	border-left-width: 4px;
+	border-left-width: 3px;
 }
 
 .hmiddle {
-	padding-left: 4px;
 	border-left-width: 1px;
-	padding-right-width: 4px;
 	border-right-width: 1px;
 }
 
 .right {
-	padding-right: 1px;
-	border-right-width: 4px;
+	border-right-width: 3px;
 }
 
