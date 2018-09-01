@@ -82,7 +82,8 @@ var table_template = template.Must(template.New("name").Parse(`
 		{{range $rowIndex := $spec.RowIndices}}
 			<tr>
 				{{range $columnIndex := $spec.ColumnIndices}}
-					<td class="{{$spec.BorderClass $rowIndex $columnIndex}}">
+					<td id="row{{$rowIndex}}_col{{$columnIndex}}"
+					    class="{{$spec.BorderClass $rowIndex $columnIndex}}">
 						{{$spec.Glyph $rowIndex $columnIndex}}
 					</td>
 				{{end}}
