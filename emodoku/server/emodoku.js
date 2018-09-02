@@ -1,16 +1,62 @@
 
 var selectedCell = null;
 
+// We need to store the value that the user has specifically assigned
+// to a sudoku cell separately from the value that's displayed for the
+// cell since the value that's displayed for the cell might have been
+// concluded by the constraint engine.
+var givens = [
+    "---------",
+    "---------",
+    "---------",
+    "---------",
+    "---------",
+    "---------",
+    "---------",
+    "---------",
+    "---------",
+];
+
+function makeValueGlyphId(value) {
+  return "val" + value;
+
+}
+
 function setupSymbolInputs() {
   var parent = document.getElementById("symbols");
   for (var i = 1; i <= 9; i++) {
     var e = document.createElement("input");
     e.setAttribute("type", "text");
     e.setAttribute("size", "1");
-    e.setAttribute("id", "val" + i);
+    e.setAttribute("id", makeValueGlyphId(i));
     e.setAttribute("value", "" + i);
     parent.appendChild(e);
   }
+}
+
+// value is an integer from 1 to 9.
+function valueToGlyph(value) {
+  var e = document.getElementById(makeValueGlyphId(value));
+  return e.value;
+}
+
+function glyphToValue(glyph) {
+  parent = document.getElementById("symbols");
+  for (var i = 0; i < parent.childElementCount; i++) {
+    var e = parent.children[i];
+    if (e.value == glyph) {
+      return i + 1;
+    }
+  }
+  return null;
+}
+
+function makeCellId(row, col) {
+  return "row" + row + "_" + "col" + col;
+}
+
+function makeCellMenuId(row, col) {
+  return "MenuFor_" + makeCellId(row, col)
 }
 
 function setupSudokuGrid() {
@@ -21,7 +67,8 @@ function setupSudokuGrid() {
     for (var col = 1; col <= 9; col++) {
       var td = document.createElement("td");
       tr.appendChild(td);
-      td.setAttribute("id", "row" + row + "_" + "col" + col);
+      var id = makeCellId(row, col);
+      td.setAttribute("id", id);
       var classes = [];
       switch ((row - 1) % 3) {
         case 0: classes.push("top"); break;
@@ -34,12 +81,44 @@ function setupSudokuGrid() {
         case 2: classes.push("right"); break;
       }
       td.setAttribute("class", classes.join(" "));
+      var puSet = document.createElement("popupset");
+      td.appendChild(puSet);
+      var menu = document.createElement("menupopup");
+      puSet.appendChild(menu);
+      var menuId = makeCellMenuId(row, col);
+      td.setAttribute("popup", menuId);
+      menu.setAttribute("id", menuId);
+      // ***** also need an item for clear
+      for (var v = 1; v <= 9; v++) {
+        var item = document.createElement("menuitem");
+        menu.appendChild(item);
+        item.setAttribute("label", "" + v);
+      }
     }
   }
 }
 
+const socket = new WebSocket("ws://" + window.location.host + "/solver");
+console.log("socket", socket);
+
+socket.addEventListener("open", function(event) {
+  console.log("received socket open", event);
+});
+
+socket.addEventListener("message", function(event) {
+  console.log("received socket message", event);
+});
+
+function sendSolverRequest() {
+  var msg = givens.join("\n") + "\n";
+  socket.send(msg);
+  console.log("sent", msg);
+}
+
+
+
 window.onload = function() {
-  console.log("test javascript loaded");
+  console.log("javascript onload");
   setupSymbolInputs();
   setupSudokuGrid();
 };

@@ -4,13 +4,16 @@
 // artistically convey a symbolic message.
 package main
 
-import "path/filepath"
+import "bytes"
 import "flag"
 import "fmt"
+import "github.com/gorilla/websocket"
+import "io/ioutil"
 import "log"
 import "net/http"
 import "os"
-import "github.com/gorilla/websocket"
+import "path/filepath"
+import "sudoku/text"
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:    4096,
@@ -41,8 +44,8 @@ func main() {
 	http.HandleFunc("/", makeFileResponder(*topStaticFile))
 	http.HandleFunc("/borders.css", makeFileResponder(*bordersCSS))
 	http.HandleFunc("/emodoku.js", makeFileResponder(*jsFile))
-	// This will eventually call a handler function that the client will do websocket interactions with.
 	http.HandleFunc("/make-sudoku.html", makeFileResponder(*makeSudoku))
+	http.HandleFunc("/solver", handleSolver)
 	err := http.ListenAndServe(*webAddress, nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
@@ -66,4 +69,41 @@ func makeFileResponder(file string) func(http.ResponseWriter, *http.Request) {
 	}
 }
 
+func handleSolver(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Printf("Error upgrading to websocket: %s", err)
+		return
+	}
+	for {
+		messageType, r, err := conn.NextReader()
+		if err != nil {
+			log.Printf("conn.NextReader: %s", err)
+			return
+		}
+		if messageType != websocket.TextMessage  {
+			log.Printf("Received unsupported message type %d", messageType)
+			continue
+		}
+		msg, err := ioutil.ReadAll(r)
+		if err != nil {
+			log.Printf("Error reading message: %s", err)
+			continue
+		}
+		puzzle, err := text.TextToSudoku(string(msg))
+		if err != nil {
+			log.Printf("Error parsing sudoku from text: %s", err)
+			continue
+		}
+		err = puzzle.DoConstraints()
+		if err != nil {
+			log.Printf("Error solving puzzle: %s", err)
+			continue
+		}
+		b := bytes.NewBufferString("")
+		puzzle.Show(b)
+		log.Printf("Solved\n%s", b.String())
+		
+	}
+}
 
