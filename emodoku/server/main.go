@@ -4,7 +4,7 @@
 // artistically convey a symbolic message.
 package main
 
-import "bytes"
+import "encoding/json"
 import "flag"
 import "fmt"
 import "github.com/gorilla/websocket"
@@ -13,6 +13,7 @@ import "log"
 import "net/http"
 import "os"
 import "path/filepath"
+import "sudoku/base"
 import "sudoku/text"
 
 var upgrader = websocket.Upgrader{
@@ -95,15 +96,59 @@ func handleSolver(w http.ResponseWriter, r *http.Request) {
 			log.Printf("Error parsing sudoku from text: %s", err)
 			continue
 		}
-		err = puzzle.DoConstraints()
+		response := MakeSolutionResponse(puzzle)
+		encoded, err := json.MarshalIndent(response, "", "")
 		if err != nil {
-			log.Printf("Error solving puzzle: %s", err)
+			log.Printf("Error ncoding JSON: %s", err)
 			continue
 		}
-		b := bytes.NewBufferString("")
-		puzzle.Show(b)
-		log.Printf("Solved\n%s", b.String())
-		
+		log.Printf("Solver response:\n%s", encoded)
+		w, err := conn.NextWriter(websocket.TextMessage)
+		if err != nil {
+			log.Printf("NextWriter error: %s",err)
+			continue
+		}
+		_, err = w.Write(encoded)
+		if err != nil {
+			log.Printf("Error writing to socket: %s", err)
+		}
 	}
 }
 
+type SolutionResponse struct {
+	// Size is the number of rows and columns.
+	Size uint
+	// Possibilities has an array of ints for eeach cell of the puzzle grid.
+	// This first index is the row number, the second the column number.
+	// these indices are zero origin because that's how vectors work in the
+	// languages we're using.
+	Possibilities [][][]uint
+	// Error will be the empty string if no error occurred while the puzzle
+	// was being solved, otherwise it is a string describing the error.
+	Error string
+}
+
+func MakeSolutionResponse(p *base.Puzzle) *SolutionResponse {
+	errMsg := ""
+	err := p.DoConstraints()
+	if err != nil {
+		errMsg = err.Error()
+	}
+	grid := make([][][]uint, p.Size)
+	for row := 0; row < p.Size; row++ {
+		grid[row] = make([][]uint, p.Size)
+		for col := 0; col < p.Size; col++ {
+			cell := p.Cell(col + 1, row + 1)
+			for val := 1; val <= p.Size; val++ {
+				if cell.Possibilities.HasValue(val) {
+					grid[row][col] = append(grid[row][col], uint(val))
+				}
+			}
+		}
+	}
+	return &SolutionResponse{
+		Size: uint(p.Size),
+		Possibilities: grid,
+		Error: errMsg,
+	}
+}
