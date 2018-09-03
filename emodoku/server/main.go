@@ -112,6 +112,10 @@ func handleSolver(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("Error writing to socket: %s", err)
 		}
+		err = w.Close()
+		if err != nil {
+			log.Printf("Error closing connection: %s", err)
+		}
 	}
 }
 

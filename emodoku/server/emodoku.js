@@ -6,6 +6,17 @@ var selectedCell = null;
 // cell since the value that's displayed for the cell might have been
 // concluded by the constraint engine.
 var givens = [
+    "2-----459",
+    "----7--3-",
+    "6-59---1-",
+    "3--89---1",
+    "--2---9--",
+    "1---27--5",
+    "-1---93-4",
+    "-2--3----",
+    "583-----2"
+
+/*
     "---------",
     "---------",
     "---------",
@@ -15,11 +26,18 @@ var givens = [
     "---------",
     "---------",
     "---------",
+*/
 ];
+
+var solutionResponse = null;
+
+// row and col are 1 based.
+function cellPossibilities(row, col) {
+  return solutionResponse.Possibilities[row - 1][col - 1];
+}
 
 function makeValueGlyphId(value) {
   return "val" + value;
-
 }
 
 function setupSymbolInputs() {
@@ -81,6 +99,7 @@ function setupSudokuGrid() {
         case 2: classes.push("right"); break;
       }
       td.setAttribute("class", classes.join(" "));
+      td.textContent = " ";
       var puSet = document.createElement("popupset");
       td.appendChild(puSet);
       var menu = document.createElement("menupopup");
@@ -98,6 +117,18 @@ function setupSudokuGrid() {
   }
 }
 
+function updateSudokuGrid() {
+  for (var row = 1; row <= 9; row++) {
+    for (var col = 1; col <= 9; col++) {
+      var poss = cellPossibilities(row, col)
+      if (poss.length == 1) {
+        var td = document.getElementById(makeCellId(row, col));
+        td.textContent = valueToGlyph(poss[0]);
+      }
+    }
+  }
+}
+
 const socket = new WebSocket("ws://" + window.location.host + "/solver");
 console.log("socket", socket);
 
@@ -106,7 +137,8 @@ socket.addEventListener("open", function(event) {
 });
 
 socket.addEventListener("message", function(event) {
-  console.log("received socket message", event);
+  solutionResponse = JSON.parse(event.data);
+  updateSudokuGrid();
 });
 
 function sendSolverRequest() {
@@ -114,8 +146,6 @@ function sendSolverRequest() {
   socket.send(msg);
   console.log("sent", msg);
 }
-
-
 
 window.onload = function() {
   console.log("javascript onload");
