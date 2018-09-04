@@ -44,6 +44,7 @@ function setupSymbolInputs() {
   var parent = document.getElementById("symbols");
   for (var i = 1; i <= 9; i++) {
     var e = document.createElement("input");
+    e.setAttribute("oninput", "changeGlyph(this)");
     e.setAttribute("type", "text");
     e.setAttribute("size", "1");
     e.setAttribute("id", makeValueGlyphId(i));
@@ -67,6 +68,11 @@ function glyphToValue(glyph) {
     }
   }
   return null;
+}
+
+// onimput handler for the symbol input elements.
+function changeGlyph() {
+  updateSudokuGrid()
 }
 
 function makeCellId(row, col) {
@@ -130,10 +136,10 @@ function updateSudokuGrid() {
 }
 
 const socket = new WebSocket("ws://" + window.location.host + "/solver");
-console.log("socket", socket);
 
 socket.addEventListener("open", function(event) {
   console.log("received socket open", event);
+  sendSolverRequest();
 });
 
 socket.addEventListener("message", function(event) {
