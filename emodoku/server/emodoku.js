@@ -1,11 +1,10 @@
 
-var selectedCell = null;
-
 // We need to store the value that the user has specifically assigned
 // to a sudoku cell separately from the value that's displayed for the
 // cell since the value that's displayed for the cell might have been
 // concluded by the constraint engine.
 var givens = [
+/*
     "2-----459",
     "----7--3-",
     "6-59---1-",
@@ -15,21 +14,38 @@ var givens = [
     "-1---93-4",
     "-2--3----",
     "583-----2"
-
-/*
-    "---------",
-    "---------",
-    "---------",
-    "---------",
-    "---------",
-    "---------",
-    "---------",
-    "---------",
-    "---------",
 */
+    "-1-------",
+    "---------",
+    "---------",
+    "---------",
+    "---------",
+    "---------",
+    "---------",
+    "---------",
+    "---------",
 ];
 
 var solutionResponse = null;
+
+// getGiven returns the character friom the givens array.
+function getGiven(row, col) {
+  return givens[row - 1][col - 1];
+}
+
+// setGiven converts value (an integer from 1 through 9) to the corresponding
+// digit and stores it in givens.
+function setGiven(row, col, value) {
+  var r = givens[row - 1];
+  r = r.slice(0, col - 1) + "0123456789"[value] + r.slice(col, r.length);
+  givens[row - 1] = r;
+}
+
+function clearGiven(row, col) {
+  var r = givens[row - 1];
+  r = r.slice(0, col - 1) + "-" + r.slice(coll, r.length);
+  givens[row - 1] = r;
+}
 
 // row and col are 1 based.
 function cellPossibilities(row, col) {
@@ -83,6 +99,11 @@ function makeCellMenuId(row, col) {
   return "MenuFor_" + makeCellId(row, col)
 }
 
+function cellIdToRowCol(cellId) {
+  var m = cellId.match(/row([1-9])_col([1-9])/);
+  return { "row": m[1], "col": m[2] }
+}
+
 function setupSudokuGrid() {
   var parent = document.getElementById("sudoku");
   for (var row = 1; row <= 9; row++) {
@@ -108,28 +129,66 @@ function setupSudokuGrid() {
       td.textContent = " ";
       var puSet = document.createElement("popupset");
       td.appendChild(puSet);
-      var menu = document.createElement("menupopup");
-      puSet.appendChild(menu);
-      var menuId = makeCellMenuId(row, col);
-      td.setAttribute("popup", menuId);
-      menu.setAttribute("id", menuId);
-      // ***** also need an item for clear
-      for (var v = 1; v <= 9; v++) {
-        var item = document.createElement("menuitem");
-        menu.appendChild(item);
-        item.setAttribute("label", "" + v);
-      }
+      td.setAttribute("onclick", "gridCellPopup(this)");
     }
   }
 }
 
+var selectedCell = null;
+
+function gridCellPopup(elt) {
+  // It appears that popup dialogs aren't sufficiently standardized.
+  var rc = cellIdToRowCol(elt.id);
+  selectedCell = rc;
+  var poss = cellPossibilities(rc.row, rc.col);
+  var chooser = document.getElementById("chooser");
+  var prose = document.createElement("p");
+  chooser.appendChild(prose);
+  if (getGiven(rc.row, rc.col) == "-") {
+    prose.textContent = "Pick one of these values for the selected cell:";
+    for (var i = 0; i < poss.length; i++) {
+      var item = document.createElement("span");
+      chooser.appendChild(item);
+      item.setAttribute("class", "value-choice");
+      item.textContent = valueToGlyph(poss[i]);
+      item.setAttribute("onclick", "pickCellValue(this)");
+    }
+  } else {
+    prose.textContent = "Do you want to clear the selected cell?";
+  }
+}
+
+function clearChooser() {
+  var chooser = document.getElementById("chooser");
+  while (chooser.firstChild) {
+    chooser.removeChild(chooser.firstChild);
+  }
+  selectedCell = null;
+}
+
+function pickCellValue(elt) {
+  var value = glyphToValue(elt.TextContent);
+  console.log
+  setGiven(selectedCell.row, selectedCell.col, value);
+  sendSolverRequest();
+  clearChooser();
+}
+
+
 function updateSudokuGrid() {
+  console.log("update grid");
   for (var row = 1; row <= 9; row++) {
     for (var col = 1; col <= 9; col++) {
       var poss = cellPossibilities(row, col)
       if (poss.length == 1) {
         var td = document.getElementById(makeCellId(row, col));
         td.textContent = valueToGlyph(poss[0]);
+        // ***** distinguishing given cells doesn;t work yet.
+        if (getGiven(row, col) == "-") {
+          td.classList.remove("given");
+        } else {
+          td.classList.add("given");
+        }
       }
     }
   }

@@ -3,6 +3,17 @@
     <title>Design Your Emodoku</title>
     <link rel="stylesheet" type="text/css" href="borders.css">
     <script src="emodoku.js" type="text/javascript"></script>
+    <style type="text/css">
+.given {
+	background-color: rgb(255,255,120);
+}
+.value-choice {
+	margin: 5;
+	padding: 5;
+	border-color: black;
+	border-width: 2;
+}
+    </style>
   </head>
   <body>
     <h1>Design Your Emodoku</h1>
@@ -18,8 +29,10 @@
     <p>
       Select a grid cell below to set its content.
     </p>
-
-    <table id="sudoku">
-    </table>
+    <div>
+      <table id="sudoku">
+      </table>
+      <div id="chooser"></div>
+    </div>
   </body>
 </html>
