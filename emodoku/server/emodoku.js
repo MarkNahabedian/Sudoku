@@ -200,7 +200,10 @@ function updateSaveText() {
   var save = document.getElementById("save");
   var text = ""
   for (var i = 1; i <= 9; i++) {
-    text += valueToGlyph(i);
+    if (i > 1) {
+      text += " ";
+    }
+    text += valueToGlyph(i).codePointAt(0).toString(16);
   }
   text += "\n\n";
   for (var row of givens) {
@@ -213,13 +216,13 @@ function updateSaveText() {
 }
 
 function restoreFromSaveText(event) {
-  console.log("restoreFromSaveText\n", event.target.value);
   var text = event.target.value.split("\n");
   // Restore glyphs
-  symbols = document.getElementById("symbols");
+  var symbols = document.getElementById("symbols");
+  var encoded = text[0].split(" ");
   for (var i = 0; i < symbols.childElementCount; i++) {
     var e = symbols.children[i];
-    e.value = text[0][i];
+    e.value = String.fromCodePoint(parseInt(encoded[i], 16));
   }
   // Restore givens
   for (var i = 0; i < 9; i++) {
