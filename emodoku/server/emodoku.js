@@ -49,7 +49,7 @@ function setupSymbolInputs() {
   var parent = document.getElementById("symbols");
   for (var i = 1; i <= 9; i++) {
     var e = document.createElement("input");
-    e.setAttribute("oninput", "changeGlyph(this)");
+    e.setAttribute("onchange", "changeGlyph(this)");
     e.setAttribute("type", "text");
     e.setAttribute("size", "1");
     e.setAttribute("id", makeValueGlyphId(i));
