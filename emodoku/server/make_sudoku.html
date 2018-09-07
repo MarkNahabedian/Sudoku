@@ -4,8 +4,19 @@
     <link rel="stylesheet" type="text/css" href="borders.css">
     <script src="emodoku.js" type="text/javascript"></script>
     <style type="text/css">
+body {
+	background-color: rgb(210, 210, 210);
+}
 .given {
 	background-color: rgb(255,255,120);
+}
+#sudoku {
+	width: 350px;
+	height: 350px;
+}
+#chooser {
+	height: 5ex;
+	margin: 20;
 }
 .value-choice {
 	margin: 5;
@@ -39,6 +50,12 @@
       <table id="sudoku">
       </table>
       <div id="chooser"></div>
+      <p>
+        The text below is a complete representation of your puzzle.
+        You can copy it from here to save it elsewhere, or paste such
+        saved text here to cintinute working with your puzzle.
+      </p>
+      <textarea id="save" rows="15" onchange="restoreFromSaveText(event)"></textarea>
     </div>
   </body>
 </html>

@@ -193,6 +193,40 @@ function updateSudokuGrid() {
       }
     }
   }
+  updateSaveText();
+}
+
+function updateSaveText() {
+  var save = document.getElementById("save");
+  var text = ""
+  for (var i = 1; i <= 9; i++) {
+    text += valueToGlyph(i);
+  }
+  text += "\n\n";
+  for (var row of givens) {
+    for (var item of row) {
+      text += item;
+    }
+    text += "\n";
+  }
+  save.textContent = text;
+}
+
+function restoreFromSaveText(event) {
+  console.log("restoreFromSaveText\n", event.target.value);
+  var text = event.target.value.split("\n");
+  // Restore glyphs
+  symbols = document.getElementById("symbols");
+  for (var i = 0; i < symbols.childElementCount; i++) {
+    var e = symbols.children[i];
+    e.value = text[0][i];
+  }
+  // Restore givens
+  for (var i = 0; i < 9; i++) {
+    givens[i] = text[2 + i];
+  }
+  // Update display:
+  sendSolverRequest();
 }
 
 const socket = new WebSocket("ws://" + window.location.host + "/solver");
