@@ -38,7 +38,7 @@ var jsFile = flag.String("jsFile", "emodoku.js",
 	"The path to the client-side javascript file.")
 
 var makeSudoku = flag.String("makeSudoku", "make_sudoku.html",
-	"The path to the html page that implements the service.")
+	"The path to the HTML page that implements the service.")
 
 func main() {
 	flag.Parse()
@@ -102,7 +102,7 @@ func handleSolver(w http.ResponseWriter, r *http.Request) {
 			log.Printf("Error ncoding JSON: %s", err)
 			continue
 		}
-		log.Printf("Solver response:\n%s", encoded)
+		// log.Printf("Solver response:\n%s", encoded)
 		w, err := conn.NextWriter(websocket.TextMessage)
 		if err != nil {
 			log.Printf("NextWriter error: %s",err)

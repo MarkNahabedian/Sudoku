@@ -167,8 +167,7 @@ function clearChooser() {
 }
 
 function pickCellValue(elt) {
-  var value = glyphToValue(elt.TextContent);
-  console.log
+  var value = glyphToValue(elt.textContent);
   setGiven(selectedCell.row, selectedCell.col, value);
   sendSolverRequest();
   clearChooser();
@@ -176,14 +175,13 @@ function pickCellValue(elt) {
 
 
 function updateSudokuGrid() {
-  console.log("update grid");
+  // console.log("update grid");
   for (var row = 1; row <= 9; row++) {
     for (var col = 1; col <= 9; col++) {
       var poss = cellPossibilities(row, col)
       if (poss.length == 1) {
         var td = document.getElementById(makeCellId(row, col));
         td.textContent = valueToGlyph(poss[0]);
-        // ***** distinguishing given cells doesn;t work yet.
         if (getGiven(row, col) == "-") {
           td.classList.remove("given");
         } else {
@@ -197,7 +195,6 @@ function updateSudokuGrid() {
 const socket = new WebSocket("ws://" + window.location.host + "/solver");
 
 socket.addEventListener("open", function(event) {
-  console.log("received socket open", event);
   sendSolverRequest();
 });
 
@@ -209,11 +206,10 @@ socket.addEventListener("message", function(event) {
 function sendSolverRequest() {
   var msg = givens.join("\n") + "\n";
   socket.send(msg);
-  console.log("sent", msg);
+  // console.log("sent\n", msg);
 }
 
 window.onload = function() {
-  console.log("javascript onload");
   setupSymbolInputs();
   setupSudokuGrid();
 };
