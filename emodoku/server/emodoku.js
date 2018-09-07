@@ -4,18 +4,7 @@
 // cell since the value that's displayed for the cell might have been
 // concluded by the constraint engine.
 var givens = [
-/*
-    "2-----459",
-    "----7--3-",
-    "6-59---1-",
-    "3--89---1",
-    "--2---9--",
-    "1---27--5",
-    "-1---93-4",
-    "-2--3----",
-    "583-----2"
-*/
-    "-1-------",
+    "---------",
     "---------",
     "---------",
     "---------",
@@ -43,7 +32,7 @@ function setGiven(row, col, value) {
 
 function clearGiven(row, col) {
   var r = givens[row - 1];
-  r = r.slice(0, col - 1) + "-" + r.slice(coll, r.length);
+  r = r.slice(0, col - 1) + "-" + r.slice(col, r.length);
   givens[row - 1] = r;
 }
 
@@ -138,6 +127,7 @@ var selectedCell = null;
 
 function gridCellPopup(elt) {
   // It appears that popup dialogs aren't sufficiently standardized.
+  clearChooser();
   var rc = cellIdToRowCol(elt.id);
   selectedCell = rc;
   var poss = cellPossibilities(rc.row, rc.col);
@@ -155,6 +145,11 @@ function gridCellPopup(elt) {
     }
   } else {
     prose.textContent = "Do you want to clear the selected cell?";
+    var clearButton = document.createElement("div");
+    clearButton.setAttribute("class", "clear-button");
+    clearButton.textContent = "Clear";
+    clearButton.setAttribute("onclick", "clearCellValue()");
+    chooser.appendChild(clearButton);
   }
 }
 
@@ -173,20 +168,28 @@ function pickCellValue(elt) {
   clearChooser();
 }
 
+function clearCellValue() {
+  clearGiven(selectedCell.row, selectedCell.col);
+  sendSolverRequest();
+  clearChooser();
+}
 
 function updateSudokuGrid() {
   // console.log("update grid");
   for (var row = 1; row <= 9; row++) {
     for (var col = 1; col <= 9; col++) {
       var poss = cellPossibilities(row, col)
+      var td = document.getElementById(makeCellId(row, col));
       if (poss.length == 1) {
-        var td = document.getElementById(makeCellId(row, col));
         td.textContent = valueToGlyph(poss[0]);
         if (getGiven(row, col) == "-") {
           td.classList.remove("given");
         } else {
           td.classList.add("given");
         }
+      } else {
+        td.textContent = " ";
+        td.classList.remove("given");
       }
     }
   }
