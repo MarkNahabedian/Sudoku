@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <style type="text/css">
+body {
+	background-color: rgb(128, 128, 128);
+}
+.page {
+	display: grid;
+	grid-template-columns: 50% 50%;
+	grid-template-rows: 50% 50%;
+}
+.above-fold p {
+	transform: rotate(180deg);
+}
+.panel {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 3in;
+	width: 2.5in;
+	vertical-align: middle;
+	background-color: rgb(0, 0, 128);
+	margin: 0;
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+}
+.panel p {
+	background-color: rgb(0, 128, 0);
+	height 100%;
+	border-style: none;
+	text-align: center;
+	vertical-align: middle;
+	color: yellow;
+	font-weight: bold;
+	font-size: x-large;
+}
+.recto {
+	page-break-inside: avoid;
+	page-break-before: right;
+}
+.verso {
+	page-break-inside: avoid;
+	page-break-before: left;
+}
+    </style>
+  </head>
+  <body>
+    <div class="page recto">
+      <div class="panel above-fold left-of-fold">
+        <p>(1 top left) printed greeting card message here</p>
+      </div>
+      <div class="panel above-fold right-of-fold">
+        <p>(1 top right) Intentionally blank</p>
+      </div>
+      <div class="panel below-fold left-of-fold">
+        <p>(1 bottom left) Back of card</p>
+      </div>
+      <div class="panel below-fold right-of-fold">
+        <p>(1 bottom right) Puzzle here</p>
+      </div>
+    </div>
+    <hr />
+    <div class="page verso">
+      <div class="panel above-fold left-of-fold">
+        <p>(2 top left) blank</p>
+      </div>
+      <div class="panel above-fold right-of-fold">
+        <p>(2 top right) blank</p>
+      </div>
+      <div class="panel below-fold left-of-fold">
+        <p>(2 bottom left) puzzle solution here</p>
+      </div>
+      <div class="panel below-fold right-of-fold">
+        <p>(2 bottom right) blank</p>
+      </div>
+    </div>
+  </body>
+</html>
