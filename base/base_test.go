@@ -29,15 +29,14 @@ func TestRowColumn(t *testing.T) {
 	p.Cell(1, 1).MustBe(1, Given, nil)
 	p.Cell(1, 2).MustBe(2, Given, nil)
 
-	/*
-		if b, v := p.Cell(1, 1).IsSolved(); b {
-			if v != 1 {
-				t.Errorf("IsSolved returned wring value")
-			}
-		} else {
-			t.Errorf("IsSolved should have returned true: %d", p.Cell(1, 1).Possibilities)
+	if b, v := p.Cell(1, 1).IsSolved(); b {
+		if v != 1 {
+			t.Errorf("IsSolved returned wrong value")
 		}
-	*/
+	} else {
+		t.Errorf("IsSolved should have returned true: %d", p.Cell(1, 1).Possibilities)
+	}
+
 	if err := p.DoConstraints(); err != nil {
 		t.Errorf("Error during DoConstraints: %s", err.Error())
 	}
