@@ -196,9 +196,15 @@ type Justification struct {
 }
 
 func (j *Justification) Pretty() string {
-	return fmt.Sprintf("%3d: Cell(%d, %d) %s %d %s",
-		j.Tick, j.Cell.X, j.Cell.Y, JustificationOpStrings[j.Operation],
-		j.Value, j.Constraint.Name())
+	if j.Group != nil {
+		return fmt.Sprintf("%3d: Cell(%d, %d) %s %d %s on %s",
+			j.Tick, j.Cell.X, j.Cell.Y, JustificationOpStrings[j.Operation],
+			j.Value, j.Constraint.Name(), j.Group.label)
+	} else {
+		return fmt.Sprintf("%3d: Cell(%d, %d) %s %d %s",
+			j.Tick, j.Cell.X, j.Cell.Y, JustificationOpStrings[j.Operation],
+			j.Value, j.Constraint.Name())
+	}
 }
 
 func (p *Puzzle) Justify(c *Cell, op JustificationOp, value int, constraint Constraint, group *Group) *Justification {
@@ -298,6 +304,7 @@ var Given = FunctionConstraint{
 type Group struct {
 	puzzle      *Puzzle
 	cells       []*Cell
+	label       string
 	constraints []Constraint
 }
 
@@ -421,10 +428,11 @@ func init() {
 // AddLinerGroups adds the conventional sudoku row and column constraints
 // to the Puzzle.
 func (p *Puzzle) AddLineGroups() *Puzzle {
-	addGroup := func(cells []*Cell) {
+	addGroup := func(cells []*Cell, label string) {
 		g := &Group{
 			puzzle: p,
 			cells:  cells,
+			label: label,
 			constraints: []Constraint{
 				HereThenNotElsewhereConstraint,
 				NotElsewhereThenHereConstraint,
@@ -437,14 +445,14 @@ func (p *Puzzle) AddLineGroups() *Puzzle {
 		for y := 1; y <= p.Size; y++ {
 			column = append(column, p.Cell(x, y))
 		}
-		addGroup(column)
+		addGroup(column, fmt.Sprintf("col%d", x))
 	}
 	for y := 1; y <= p.Size; y++ {
 		row := []*Cell{}
 		for x := 1; x <= p.Size; x++ {
 			row = append(row, p.Cell(x, y))
 		}
-		addGroup(row)
+		addGroup(row, fmt.Sprintf("row%d", y))
 	}
 	return p
 }
@@ -464,6 +472,7 @@ func (p *Puzzle) Add3x3Groups() *Puzzle {
 			g := &Group{
 				puzzle: p,
 				cells:  block,
+				label:  fmt.Sprintf("box%d%d", sx, sy),
 				constraints: []Constraint{
 					HereThenNotElsewhereConstraint,
 					NotElsewhereThenHereConstraint,
