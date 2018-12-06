@@ -26,8 +26,8 @@ func TestRowColumn(t *testing.T) {
 	p.AddLineGroups()
 	p.Add3x3Groups()
 
-	p.Cell(1, 1).MustBe(1, Given)
-	p.Cell(1, 2).MustBe(2, Given)
+	p.Cell(1, 1).MustBe(1, Given, nil)
+	p.Cell(1, 2).MustBe(2, Given, nil)
 
 	/*
 		if b, v := p.Cell(1, 1).IsSolved(); b {
@@ -56,7 +56,7 @@ func TestRowColumn(t *testing.T) {
 	checkCell(3, 3, 1, false)
 	checkCell(3, 3, 2, false)
 	checkCell(3, 3, 4, true)
-	if _, err := p.Cell(1, 1).MustBe(2, Given); err == nil {
+	if _, err := p.Cell(1, 1).MustBe(2, Given, nil); err == nil {
 		t.Errorf("Expected a contradiction")
 	}
 }
@@ -69,7 +69,7 @@ func TestSudoku1(t *testing.T) {
 	p.AddLineGroups()
 	p.Add3x3Groups()
 	given := func(x int, y int, value int) {
-		p.Cell(x, y).MustBe(value, Given)
+		p.Cell(x, y).MustBe(value, Given, nil)
 	}
 	given(3, 1, 2)
 	given(4, 1, 8)
@@ -132,7 +132,7 @@ func TestSudoku2(t *testing.T) {
 	p.AddLineGroups()
 	p.Add3x3Groups()
 	given := func(x int, y int, value int) {
-		p.Cell(x, y).MustBe(value, Given)
+		p.Cell(x, y).MustBe(value, Given, nil)
 	}
 	given(2, 1, 3)
 	given(5, 1, 2)
@@ -193,7 +193,7 @@ func TestSudoku3(t *testing.T) {
 	p.AddLineGroups()
 	p.Add3x3Groups()
 	given := func(x int, y int, value int) {
-		p.Cell(x, y).MustBe(value, Given)
+		p.Cell(x, y).MustBe(value, Given, nil)
 	}
 	given(1, 1, 8)
 	given(3, 1, 5)

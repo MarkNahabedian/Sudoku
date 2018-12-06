@@ -190,6 +190,7 @@ type Justification struct {
 	Tick       uint
 	Cell       *Cell
 	Constraint Constraint
+	Group      *Group
 	Operation  JustificationOp
 	Value      int
 }
@@ -200,11 +201,12 @@ func (j *Justification) Pretty() string {
 		j.Value, j.Constraint.Name())
 }
 
-func (p *Puzzle) Justify(c *Cell, op JustificationOp, value int, constraint Constraint) *Justification {
+func (p *Puzzle) Justify(c *Cell, op JustificationOp, value int, constraint Constraint, group *Group) *Justification {
 	j := &Justification{
 		Tick:       p.Progress,
 		Cell:       c,
 		Constraint: constraint,
+		Group:      group,
 		Operation:  op,
 		Value:      value,
 	}
@@ -213,7 +215,7 @@ func (p *Puzzle) Justify(c *Cell, op JustificationOp, value int, constraint Cons
 	return j
 }
 
-func (c *Cell) CantBe(v int, constraint Constraint) (*Cell, error) {
+func (c *Cell) CantBe(v int, constraint Constraint, group *Group) (*Cell, error) {
 	old := c.Possibilities
 	c.Possibilities = c.Possibilities.SetHasValue(v, false)
 	if c.Possibilities.Len() == 0 {
@@ -221,7 +223,7 @@ func (c *Cell) CantBe(v int, constraint Constraint) (*Cell, error) {
 			v, c.X, c.Y, constraint.Name())
 	}
 	if c.Possibilities != old {
-		c.Puzzle.Justify(c, CANT_BE, v, constraint)
+		c.Puzzle.Justify(c, CANT_BE, v, constraint, group)
 		if c.Possibilities.IsEmpty() {
 			fmt.Fprintf(os.Stderr, "No remaining possible values for cell %d, %d\n", c.X, c.Y)
 			for _, j := range c.Puzzle.Justifications {
@@ -235,7 +237,7 @@ func (c *Cell) CantBe(v int, constraint Constraint) (*Cell, error) {
 	return c, nil
 }
 
-func (c *Cell) MustBe(v int, constraint Constraint) (*Cell, error) {
+func (c *Cell) MustBe(v int, constraint Constraint, group *Group) (*Cell, error) {
 	old := c.Possibilities
 	if !c.HasPossibleValue(v) {
 		return c, &Contradiction{Cell: c, Issue: fmt.Sprintf("%d is not a possible Value for MustBe", v)}
@@ -245,7 +247,7 @@ func (c *Cell) MustBe(v int, constraint Constraint) (*Cell, error) {
 		panic("MustBe produced Empty")
 	}
 	if c.Possibilities != old {
-		c.Puzzle.Justify(c, MUST_BE, v, constraint)
+		c.Puzzle.Justify(c, MUST_BE, v, constraint, group)
 	}
 	return c, nil
 }
@@ -374,7 +376,7 @@ func init() {
 				for _, c3 := range g.Cells() {
 					if c3.Possibilities != c1.Possibilities {
 						c1.Possibilities.DoValues(func(val int) bool {
-							_, err := c3.CantBe(val, HereThenNotElsewhereConstraint)
+							_, err := c3.CantBe(val, HereThenNotElsewhereConstraint, g)
 							if err != nil {
 								panic(err)
 							}
@@ -407,7 +409,7 @@ func init() {
 		}
 		for v, cells := range valueCells {
 			if len(cells) == 1 {
-				if _, err := cells[0].MustBe(v, NotElsewhereThenHereConstraint); err != nil {
+				if _, err := cells[0].MustBe(v, NotElsewhereThenHereConstraint, g); err != nil {
 					return err
 				}
 			}
@@ -668,7 +670,7 @@ func (c *KenKenCageConstraint) DoConstraint(g *Group) error {
 				}
 			}
 			if !found {
-				_, err := cell.CantBe(p, c)
+				_, err := cell.CantBe(p, c, g)
 				if err != nil {
 
 					panic(err)
