@@ -14,6 +14,8 @@ type Contradiction struct {
 	Cell *Cell
 	// Issue is the error message describing the contradiction.
 	Issue string
+	Constraint Constraint
+	Group *Group
 }
 
 // Error implements the error interface.
@@ -225,8 +227,13 @@ func (c *Cell) CantBe(v int, constraint Constraint, group *Group) (*Cell, error)
 	old := c.Possibilities
 	c.Possibilities = c.Possibilities.SetHasValue(v, false)
 	if c.Possibilities.Len() == 0 {
-		return c, fmt. Errorf("No more possibilities after elimination of value %d from cell(%d, %d) by constraint %s",
-			v, c.X, c.Y, constraint.Name())
+		return c, &Contradiction{
+			Cell: c,
+			Constraint: constraint,
+			Group: group,
+			Issue: fmt.Sprintf("No more possibilities after elimination of value %d from cell(%d, %d) by constraint %s",
+			v, c.X, c.Y, constraint.Name()),
+		}
 	}
 	if c.Possibilities != old {
 		c.Puzzle.Justify(c, CANT_BE, v, constraint, group)
@@ -246,7 +253,12 @@ func (c *Cell) CantBe(v int, constraint Constraint, group *Group) (*Cell, error)
 func (c *Cell) MustBe(v int, constraint Constraint, group *Group) (*Cell, error) {
 	old := c.Possibilities
 	if !c.HasPossibleValue(v) {
-		return c, &Contradiction{Cell: c, Issue: fmt.Sprintf("%d is not a possible Value for MustBe", v)}
+		return c, &Contradiction{
+			Cell: c,
+			Constraint: constraint,
+			Group: group,
+			Issue: fmt.Sprintf("%d is not a possible Value for MustBe", v),
+		}
 	}
 	c.Possibilities = NewValueSet([]int{v})
 	if c.Possibilities.IsEmpty() {
