@@ -39,7 +39,7 @@ func TextToSudoku(text string) (*base.Puzzle, error) {
 					row, column)
 			}
 			value := int(c - '0')
-			p.Cell(column, row).MustBe(value, base.Given)
+			p.Cell(column, row).MustBe(value, base.Given, nil)
 			fallthrough
 		case '-':
 			any = true
@@ -171,7 +171,7 @@ grid_done:
 	p.AddLineGroups()
 
 	for c, v := range cell_values {
-		c.MustBe(v, base.Given)
+		c.MustBe(v, base.Given, nil)
 	}
 
 	// Now read the cage constraints.
