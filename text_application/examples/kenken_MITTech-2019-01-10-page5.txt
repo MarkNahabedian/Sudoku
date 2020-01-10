@@ -1,0 +1,36 @@
+
+aabbbcdee
+affbgcd1e
+afhhgiii5
+jjkhglllm
+5jknnnnlm
+ooknpppl8
+qqrrsstuu
+vvv6swt4u
+vxxxxwyyy
+
+a: 30+
+b: 192*
+c: 3+
+d: 11+
+e: 2-
+f: 280*
+g: 45*
+h: 192*
+i: 12+
+j: 48*
+k: 12+
+l: 27+
+m: 8-
+n: 33+
+o: 6*
+p: 24*
+q: 30*
+r: 2-
+s: 189*
+t: 36*
+u: 112*
+v: 16*
+w: 20*
+x: 23+
+y: 144*
