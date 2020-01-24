@@ -1,0 +1,39 @@
+
+aaaabbcdd
+eee3bfcg5
+ehiiifcgj
+khilmmm3j
+knnlmoppp
+qqqrmosss
+ttqr6osuu
+vvwwwxxyy
+7vzzzzAAy
+
+a: 22+
+b: 140*
+c: 42*
+d: 16*
+e: 432*
+f: 3+
+g: 15+
+h: 5/
+i: 270*
+j: 36*
+k: 24*
+l: 63*
+m: 26+
+n: 21*
+o: 224*
+p: 40*
+q: 180*
+r: 3-
+s: 108*
+t: 16*
+u: 7*
+v: 28*
+w: 40*
+x: 24*
+y: 162*
+z: 144*
+A: 30*
+
