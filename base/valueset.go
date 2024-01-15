@@ -45,7 +45,7 @@ func (vs ValueSet) HasValue(v int) bool {
 	return vs&m == m
 }
 
-// SetHasValue returns a new ValueSet with v adde3d to vs.
+// SetHasValue returns a new ValueSet with v added to vs.
 func (vs ValueSet) SetHasValue(v int, has bool) ValueSet {
 	if has {
 		return vs | bitmask(v)
