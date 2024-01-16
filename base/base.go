@@ -20,7 +20,7 @@ type Contradiction struct {
 
 // Error implements the error interface.
 func (c *Contradiction) Error() string {
-	return fmt.Sprintf("Contradiction at [%d, %d]: %s", c.Cell.X, c.Cell.Y, c.Issue)
+	return fmt.Sprintf("Contradiction at [%d, %d], group %s: %s", c.Cell.X, c.Cell.Y, c.Group.label, c.Issue)
 }
 
 // GridKey represents a location in a Puzzle's cell grid.
@@ -93,6 +93,12 @@ func (p *Puzzle) Cell(x, y int) *Cell {
 		panic(fmt.Sprintf("No cell at %d, %d", x, y))
 	}
 	return c
+}
+
+func (p *Puzzle) ShowJustifications() {
+	for _, j := range p.Justifications {
+		fmt.Fprintf(os.Stderr, "%s\n", j.Pretty())
+	}
 }
 
 func Universe(size int) ValueSet {
@@ -382,10 +388,13 @@ func init() {
 		// possibilities are the same then none of the other cells in the group
 		// can have any of those values.
 		for i, c1 := range g.Cells() {
+			// *** I DON'T UNDERSTAND THIS TEST.
 			if c1.Possibilities.Len() > c1.Puzzle.Universe.Len()-i {
 				continue
 			}
-			count := 0 // How many of the remaining cells have the same Possibilities
+			// How many cells in g have the same Possibilities as c1?
+			count := 0
+			// We ignore the cells before c1 because they will have already been considered.
 			for _, c2 := range g.Cells()[i:] {
 				if c1.Possibilities == c2.Possibilities {
 					count += 1
@@ -397,6 +406,7 @@ func init() {
 						c1.Possibilities.DoValues(func(val int) bool {
 							_, err := c3.CantBe(val, HereThenNotElsewhereConstraint, g)
 							if err != nil {
+								g.puzzle.ShowJustifications()
 								panic(err)
 							}
 							return true
@@ -589,7 +599,7 @@ var KenKenOperatorSymbols = make(map[string]*KenKenOperator)
 
 func init() {
 	KenKenOperatorSymbols["+"] = MustKenKenOperator("Addition")
-    KenKenOperatorSymbols["-"] = MustKenKenOperator("Subtraction")
+	KenKenOperatorSymbols["-"] = MustKenKenOperator("Subtraction")
 	KenKenOperatorSymbols["*"] = MustKenKenOperator("Multiplication")
 	KenKenOperatorSymbols["/"] = MustKenKenOperator("Division")
 }
@@ -693,7 +703,7 @@ func (c *KenKenCageConstraint) DoConstraint(g *Group) error {
 			if !found {
 				_, err := cell.CantBe(p, c, g)
 				if err != nil {
-
+					g.puzzle.ShowJustifications()
 					panic(err)
 				}
 			}
