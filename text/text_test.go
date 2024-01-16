@@ -5,13 +5,14 @@ import "bytes"
 
 func TestSudokuOnly17Given(t *testing.T) {
 	p, err := TextToSudoku(`
+                # This is a comment
 		---7-----
 		1--------
 		---43-2--
 		--------6
 		---5-9---
 		------418
-		----81---
+		----81---   # another comment
 		--2----5-
 		-4----3--
 	`)
@@ -43,6 +44,7 @@ func TestSudokuOnly17Given(t *testing.T) {
 		t.Errorf("Not solved")
 	}
 }
+
 
 func TestDiscoParty(t *testing.T) {
 	// This test is from the "Disco Party" Ken-Ken published on
@@ -103,3 +105,4 @@ func TestDiscoParty(t *testing.T) {
 		t.Errorf("Not solved")
 	}
 }
+

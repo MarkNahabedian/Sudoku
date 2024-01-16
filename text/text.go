@@ -19,19 +19,40 @@ import "sudoku/base"
 func TextToSudoku(text string) (*base.Puzzle, error) {
 	p := base.NewEmptySudoku()
 
+	linenumber := 1
+	linecharnumber := 0
 	row := 1
 	column := 1
 	any := false
+	comment := false
+
+	new_line := func () {
+		if any {
+			row += 1
+			column = 1
+		}
+		linenumber += 1
+		linecharnumber = 0
+	}
+
 	for _, c := range text {
+		linecharnumber += 1
+		if comment {
+			if c == '\n' {
+				comment = false
+				new_line()
+			}
+			continue
+		}
 		switch c {
+		case '#':
+			comment = true
+			break
 		case ' ', '\t':
 			// Ignore
 			break
 		case '\n':
-			if any {
-				row += 1
-				column = 1
-			}
+			new_line()
 			break
 		case '1', '2', '3', '4', '5', '6', '7', '8', '9':
 			if row > 9 || column > 9 {
@@ -45,6 +66,9 @@ func TextToSudoku(text string) (*base.Puzzle, error) {
 			any = true
 			column += 1
 			break
+		default:
+			return p, fmt.Errorf("invalid input character '%c': line %d, character %d",
+				c, linenumber, linecharnumber)
 		}
 	}
 
@@ -108,9 +132,21 @@ func TextToKenKen(text string) (*base.Puzzle, error) {
 	}
 
 	// First read the grid.
+	linenumber := 1
+	linecharnumber := 0
 	row := 1
 	column := 1
 	any := false
+	comment := false
+
+	new_line := func () {
+		if any {
+			row += 1
+			column = 1
+		}
+		linenumber += 1
+		linecharnumber = 0
+	}
 
 	next_cell := func() {
 		any = true
@@ -121,10 +157,20 @@ func TextToKenKen(text string) (*base.Puzzle, error) {
 
 	for {
 		c, _, err := reader.ReadRune()
-        if err != nil {
+		if err != nil {
 			return p, err
 		}
+		if comment {
+			if c == '\n' {
+				comment = false
+				new_line()
+			}
+			continue
+		}
 		switch c {
+		case '#':
+			comment = true
+			break
 		case ' ', '\t':
 			// Ignore
 			break
@@ -151,7 +197,8 @@ func TextToKenKen(text string) (*base.Puzzle, error) {
 			break
 		default:
 			if !unicode.IsLetter(c) {
-				break
+				return p, fmt.Errorf("invalid input character '%c': line %d, character %d",
+					c, linenumber, linecharnumber)
 			}
 			cl := cell(column, row)
 			g := group(c)
