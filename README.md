@@ -53,6 +53,9 @@ collectively applies, for example a row in a Sudoku whose cells can
 not contain matching values.  Each `Group` has a list of its menber
 cells and a list of constraints that apply to the cells of that group.
 
+`puzzle.DoConstraints()` propagates constraints until exhaustion.
+This will hopefully yield a solution.
+
 
 ## Constraints
 
@@ -150,6 +153,11 @@ puzzle, err := TextToKenKen(`
 
 
 ## Command Line Solver
+
+The text_application directory contains the source code for an
+application which will solve a puzzle expressed in a text file. 
+text_application/examples contains example input files.
+ 
 
 ## Web Based Solver
 
