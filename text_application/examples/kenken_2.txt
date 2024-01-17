@@ -1,0 +1,20 @@
+
+aaabb2
+acccdd
+eefgdd
+hefgii
+hjjjkk
+hjllk4
+
+a: 360 *
+b: 3 *
+c: 120 *
+d: 24 *
+e: 20 *
+f: 3 -
+g: 10 *
+h: 12 *
+i: 6 *
+j: 48 *
+k: 150 *
+l: 3 *

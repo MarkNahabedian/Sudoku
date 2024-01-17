@@ -1,0 +1,445 @@
+go run main.go -puzzle=kenken -input=examples/kenken_MITTech-2019-04-18-page11.txt
+
+aabbcccdd
+4aeeeccf1
+gahheiif6
+gjjjkkifl
+8jmmnnool
+3ppqqr5o9
+sssq6r3ot
+susqvvwwt
+2uxxvyyw8
+
+a: 17+
+b: 12*
+c: 31+
+d: 4/
+e: 270*
+f: 21*
+g: 2-
+h: 1-
+i: 72*
+j: 28+
+k: 5+
+l: 20*
+m: 42*
+n: 1-
+o: 13+
+p: 2-
+q: 21+
+r: 2-
+s: 23+
+t: 4-
+u: 10+
+v: 10+
+w: 360*
+x: 9*
+y: 2-
+
+
+ 171  071  00c  00c  151  131  160   8    2  
+  4   076  136  136  116   8   162  044   1  
+ 150  0df  1df  1de  117  10e  10a  045   6  
+ 150  0ff  1fe  1fe  00f  00f  12a  045  018 
+  8    9   060  060  01e  01e   1   00a  018 
+  3   00a  00a   1    8    7    5    6    9  
+ 111  09b  19b  090   6   110   3   00a   7  
+ 171  078  17b  048  05b  03b   8   110   3  
+  2   03c  005  104  05d  138  068  110   8  
+
+  0: Cell(5, 7) MUST_BE 6 Given
+  1: Cell(1, 5) MUST_BE 8 Given
+  2: Cell(9, 2) MUST_BE 1 Given
+  3: Cell(9, 3) MUST_BE 6 Given
+  4: Cell(1, 6) MUST_BE 3 Given
+  5: Cell(7, 6) MUST_BE 5 Given
+  6: Cell(9, 6) MUST_BE 9 Given
+  7: Cell(7, 7) MUST_BE 3 Given
+  8: Cell(1, 9) MUST_BE 2 Given
+  9: Cell(1, 2) MUST_BE 4 Given
+ 10: Cell(9, 9) MUST_BE 8 Given
+ 11: Cell(3, 1) CANT_BE 1 Multiplication = 12 on 
+ 12: Cell(3, 1) CANT_BE 5 Multiplication = 12 on 
+ 13: Cell(3, 1) CANT_BE 7 Multiplication = 12 on 
+ 14: Cell(3, 1) CANT_BE 8 Multiplication = 12 on 
+ 15: Cell(3, 1) CANT_BE 9 Multiplication = 12 on 
+ 16: Cell(4, 1) CANT_BE 1 Multiplication = 12 on 
+ 17: Cell(4, 1) CANT_BE 5 Multiplication = 12 on 
+ 18: Cell(4, 1) CANT_BE 7 Multiplication = 12 on 
+ 19: Cell(4, 1) CANT_BE 8 Multiplication = 12 on 
+ 20: Cell(4, 1) CANT_BE 9 Multiplication = 12 on 
+ 21: Cell(8, 1) CANT_BE 3 Division = 4 on 
+ 22: Cell(8, 1) CANT_BE 5 Division = 4 on 
+ 23: Cell(8, 1) CANT_BE 6 Division = 4 on 
+ 24: Cell(8, 1) CANT_BE 7 Division = 4 on 
+ 25: Cell(8, 1) CANT_BE 9 Division = 4 on 
+ 26: Cell(9, 1) CANT_BE 3 Division = 4 on 
+ 27: Cell(9, 1) CANT_BE 5 Division = 4 on 
+ 28: Cell(9, 1) CANT_BE 6 Division = 4 on 
+ 29: Cell(9, 1) CANT_BE 7 Division = 4 on 
+ 30: Cell(9, 1) CANT_BE 9 Division = 4 on 
+ 31: Cell(3, 2) CANT_BE 4 Multiplication = 270 on 
+ 32: Cell(3, 2) CANT_BE 7 Multiplication = 270 on 
+ 33: Cell(3, 2) CANT_BE 8 Multiplication = 270 on 
+ 34: Cell(4, 2) CANT_BE 4 Multiplication = 270 on 
+ 35: Cell(4, 2) CANT_BE 7 Multiplication = 270 on 
+ 36: Cell(4, 2) CANT_BE 8 Multiplication = 270 on 
+ 37: Cell(5, 2) CANT_BE 4 Multiplication = 270 on 
+ 38: Cell(5, 2) CANT_BE 7 Multiplication = 270 on 
+ 39: Cell(5, 2) CANT_BE 8 Multiplication = 270 on 
+ 40: Cell(5, 3) CANT_BE 4 Multiplication = 270 on 
+ 41: Cell(5, 3) CANT_BE 7 Multiplication = 270 on 
+ 42: Cell(5, 3) CANT_BE 8 Multiplication = 270 on 
+ 43: Cell(8, 2) CANT_BE 2 Multiplication = 21 on 
+ 44: Cell(8, 2) CANT_BE 4 Multiplication = 21 on 
+ 45: Cell(8, 2) CANT_BE 5 Multiplication = 21 on 
+ 46: Cell(8, 2) CANT_BE 6 Multiplication = 21 on 
+ 47: Cell(8, 2) CANT_BE 8 Multiplication = 21 on 
+ 48: Cell(8, 2) CANT_BE 9 Multiplication = 21 on 
+ 49: Cell(8, 3) CANT_BE 2 Multiplication = 21 on 
+ 50: Cell(8, 3) CANT_BE 4 Multiplication = 21 on 
+ 51: Cell(8, 3) CANT_BE 5 Multiplication = 21 on 
+ 52: Cell(8, 3) CANT_BE 6 Multiplication = 21 on 
+ 53: Cell(8, 3) CANT_BE 8 Multiplication = 21 on 
+ 54: Cell(8, 3) CANT_BE 9 Multiplication = 21 on 
+ 55: Cell(8, 4) CANT_BE 2 Multiplication = 21 on 
+ 56: Cell(8, 4) CANT_BE 4 Multiplication = 21 on 
+ 57: Cell(8, 4) CANT_BE 5 Multiplication = 21 on 
+ 58: Cell(8, 4) CANT_BE 6 Multiplication = 21 on 
+ 59: Cell(8, 4) CANT_BE 8 Multiplication = 21 on 
+ 60: Cell(8, 4) CANT_BE 9 Multiplication = 21 on 
+ 61: Cell(6, 3) CANT_BE 5 Multiplication = 72 on 
+ 62: Cell(6, 3) CANT_BE 7 Multiplication = 72 on 
+ 63: Cell(7, 3) CANT_BE 5 Multiplication = 72 on 
+ 64: Cell(7, 3) CANT_BE 7 Multiplication = 72 on 
+ 65: Cell(7, 4) CANT_BE 5 Multiplication = 72 on 
+ 66: Cell(7, 4) CANT_BE 7 Multiplication = 72 on 
+ 67: Cell(5, 4) CANT_BE 5 Addition = 5 on 
+ 68: Cell(5, 4) CANT_BE 6 Addition = 5 on 
+ 69: Cell(5, 4) CANT_BE 7 Addition = 5 on 
+ 70: Cell(5, 4) CANT_BE 8 Addition = 5 on 
+ 71: Cell(5, 4) CANT_BE 9 Addition = 5 on 
+ 72: Cell(6, 4) CANT_BE 5 Addition = 5 on 
+ 73: Cell(6, 4) CANT_BE 6 Addition = 5 on 
+ 74: Cell(6, 4) CANT_BE 7 Addition = 5 on 
+ 75: Cell(6, 4) CANT_BE 8 Addition = 5 on 
+ 76: Cell(6, 4) CANT_BE 9 Addition = 5 on 
+ 77: Cell(9, 4) CANT_BE 1 Multiplication = 20 on 
+ 78: Cell(9, 4) CANT_BE 2 Multiplication = 20 on 
+ 79: Cell(9, 4) CANT_BE 3 Multiplication = 20 on 
+ 80: Cell(9, 4) CANT_BE 6 Multiplication = 20 on 
+ 81: Cell(9, 4) CANT_BE 7 Multiplication = 20 on 
+ 82: Cell(9, 4) CANT_BE 8 Multiplication = 20 on 
+ 83: Cell(9, 4) CANT_BE 9 Multiplication = 20 on 
+ 84: Cell(9, 5) CANT_BE 1 Multiplication = 20 on 
+ 85: Cell(9, 5) CANT_BE 2 Multiplication = 20 on 
+ 86: Cell(9, 5) CANT_BE 3 Multiplication = 20 on 
+ 87: Cell(9, 5) CANT_BE 6 Multiplication = 20 on 
+ 88: Cell(9, 5) CANT_BE 7 Multiplication = 20 on 
+ 89: Cell(9, 5) CANT_BE 8 Multiplication = 20 on 
+ 90: Cell(9, 5) CANT_BE 9 Multiplication = 20 on 
+ 91: Cell(3, 5) CANT_BE 1 Multiplication = 42 on 
+ 92: Cell(3, 5) CANT_BE 2 Multiplication = 42 on 
+ 93: Cell(3, 5) CANT_BE 3 Multiplication = 42 on 
+ 94: Cell(3, 5) CANT_BE 4 Multiplication = 42 on 
+ 95: Cell(3, 5) CANT_BE 5 Multiplication = 42 on 
+ 96: Cell(3, 5) CANT_BE 8 Multiplication = 42 on 
+ 97: Cell(3, 5) CANT_BE 9 Multiplication = 42 on 
+ 98: Cell(4, 5) CANT_BE 1 Multiplication = 42 on 
+ 99: Cell(4, 5) CANT_BE 2 Multiplication = 42 on 
+100: Cell(4, 5) CANT_BE 3 Multiplication = 42 on 
+101: Cell(4, 5) CANT_BE 4 Multiplication = 42 on 
+102: Cell(4, 5) CANT_BE 5 Multiplication = 42 on 
+103: Cell(4, 5) CANT_BE 8 Multiplication = 42 on 
+104: Cell(4, 5) CANT_BE 9 Multiplication = 42 on 
+105: Cell(5, 8) CANT_BE 9 Addition = 10 on 
+106: Cell(6, 8) CANT_BE 9 Addition = 10 on 
+107: Cell(5, 9) CANT_BE 9 Addition = 10 on 
+108: Cell(7, 8) CANT_BE 1 Multiplication = 360 on 
+109: Cell(7, 8) CANT_BE 2 Multiplication = 360 on 
+110: Cell(7, 8) CANT_BE 3 Multiplication = 360 on 
+111: Cell(7, 8) CANT_BE 4 Multiplication = 360 on 
+112: Cell(7, 8) CANT_BE 6 Multiplication = 360 on 
+113: Cell(7, 8) CANT_BE 7 Multiplication = 360 on 
+114: Cell(8, 8) CANT_BE 1 Multiplication = 360 on 
+115: Cell(8, 8) CANT_BE 2 Multiplication = 360 on 
+116: Cell(8, 8) CANT_BE 3 Multiplication = 360 on 
+117: Cell(8, 8) CANT_BE 4 Multiplication = 360 on 
+118: Cell(8, 8) CANT_BE 6 Multiplication = 360 on 
+119: Cell(8, 8) CANT_BE 7 Multiplication = 360 on 
+120: Cell(8, 9) CANT_BE 1 Multiplication = 360 on 
+121: Cell(8, 9) CANT_BE 2 Multiplication = 360 on 
+122: Cell(8, 9) CANT_BE 3 Multiplication = 360 on 
+123: Cell(8, 9) CANT_BE 4 Multiplication = 360 on 
+124: Cell(8, 9) CANT_BE 6 Multiplication = 360 on 
+125: Cell(8, 9) CANT_BE 7 Multiplication = 360 on 
+126: Cell(3, 9) CANT_BE 2 Multiplication = 9 on 
+127: Cell(3, 9) CANT_BE 4 Multiplication = 9 on 
+128: Cell(3, 9) CANT_BE 5 Multiplication = 9 on 
+129: Cell(3, 9) CANT_BE 6 Multiplication = 9 on 
+130: Cell(3, 9) CANT_BE 7 Multiplication = 9 on 
+131: Cell(3, 9) CANT_BE 8 Multiplication = 9 on 
+132: Cell(4, 9) CANT_BE 2 Multiplication = 9 on 
+133: Cell(4, 9) CANT_BE 4 Multiplication = 9 on 
+134: Cell(4, 9) CANT_BE 5 Multiplication = 9 on 
+135: Cell(4, 9) CANT_BE 6 Multiplication = 9 on 
+136: Cell(4, 9) CANT_BE 7 Multiplication = 9 on 
+137: Cell(4, 9) CANT_BE 8 Multiplication = 9 on 
+138: Cell(1, 1) CANT_BE 4 HereThenNotElsewhereConstraint on col1
+139: Cell(1, 3) CANT_BE 4 HereThenNotElsewhereConstraint on col1
+140: Cell(1, 4) CANT_BE 4 HereThenNotElsewhereConstraint on col1
+141: Cell(1, 7) CANT_BE 4 HereThenNotElsewhereConstraint on col1
+142: Cell(1, 8) CANT_BE 4 HereThenNotElsewhereConstraint on col1
+143: Cell(1, 1) CANT_BE 8 HereThenNotElsewhereConstraint on col1
+144: Cell(1, 3) CANT_BE 8 HereThenNotElsewhereConstraint on col1
+145: Cell(1, 4) CANT_BE 8 HereThenNotElsewhereConstraint on col1
+146: Cell(1, 7) CANT_BE 8 HereThenNotElsewhereConstraint on col1
+147: Cell(1, 8) CANT_BE 8 HereThenNotElsewhereConstraint on col1
+148: Cell(1, 1) CANT_BE 3 HereThenNotElsewhereConstraint on col1
+149: Cell(1, 3) CANT_BE 3 HereThenNotElsewhereConstraint on col1
+150: Cell(1, 4) CANT_BE 3 HereThenNotElsewhereConstraint on col1
+151: Cell(1, 7) CANT_BE 3 HereThenNotElsewhereConstraint on col1
+152: Cell(1, 8) CANT_BE 3 HereThenNotElsewhereConstraint on col1
+153: Cell(1, 1) CANT_BE 2 HereThenNotElsewhereConstraint on col1
+154: Cell(1, 3) CANT_BE 2 HereThenNotElsewhereConstraint on col1
+155: Cell(1, 4) CANT_BE 2 HereThenNotElsewhereConstraint on col1
+156: Cell(1, 7) CANT_BE 2 HereThenNotElsewhereConstraint on col1
+157: Cell(1, 8) CANT_BE 2 HereThenNotElsewhereConstraint on col1
+158: Cell(5, 1) CANT_BE 6 HereThenNotElsewhereConstraint on col5
+159: Cell(5, 2) CANT_BE 6 HereThenNotElsewhereConstraint on col5
+160: Cell(5, 3) CANT_BE 6 HereThenNotElsewhereConstraint on col5
+161: Cell(5, 5) CANT_BE 6 HereThenNotElsewhereConstraint on col5
+162: Cell(5, 6) CANT_BE 6 HereThenNotElsewhereConstraint on col5
+163: Cell(5, 8) CANT_BE 6 HereThenNotElsewhereConstraint on col5
+164: Cell(5, 9) CANT_BE 6 HereThenNotElsewhereConstraint on col5
+165: Cell(7, 1) CANT_BE 5 HereThenNotElsewhereConstraint on col7
+166: Cell(7, 2) CANT_BE 5 HereThenNotElsewhereConstraint on col7
+167: Cell(7, 5) CANT_BE 5 HereThenNotElsewhereConstraint on col7
+168: Cell(7, 8) CANT_BE 5 HereThenNotElsewhereConstraint on col7
+169: Cell(7, 9) CANT_BE 5 HereThenNotElsewhereConstraint on col7
+170: Cell(7, 1) CANT_BE 3 HereThenNotElsewhereConstraint on col7
+171: Cell(7, 2) CANT_BE 3 HereThenNotElsewhereConstraint on col7
+172: Cell(7, 3) CANT_BE 3 HereThenNotElsewhereConstraint on col7
+173: Cell(7, 4) CANT_BE 3 HereThenNotElsewhereConstraint on col7
+174: Cell(7, 5) CANT_BE 3 HereThenNotElsewhereConstraint on col7
+175: Cell(7, 9) CANT_BE 3 HereThenNotElsewhereConstraint on col7
+176: Cell(8, 1) CANT_BE 1 HereThenNotElsewhereConstraint on col8
+177: Cell(8, 5) CANT_BE 1 HereThenNotElsewhereConstraint on col8
+178: Cell(8, 5) CANT_BE 3 HereThenNotElsewhereConstraint on col8
+179: Cell(8, 5) CANT_BE 7 HereThenNotElsewhereConstraint on col8
+180: Cell(8, 6) CANT_BE 1 HereThenNotElsewhereConstraint on col8
+181: Cell(8, 6) CANT_BE 3 HereThenNotElsewhereConstraint on col8
+182: Cell(8, 6) CANT_BE 7 HereThenNotElsewhereConstraint on col8
+183: Cell(8, 7) CANT_BE 1 HereThenNotElsewhereConstraint on col8
+184: Cell(8, 7) CANT_BE 3 HereThenNotElsewhereConstraint on col8
+185: Cell(8, 7) CANT_BE 7 HereThenNotElsewhereConstraint on col8
+186: Cell(9, 1) CANT_BE 1 HereThenNotElsewhereConstraint on col9
+187: Cell(9, 7) CANT_BE 1 HereThenNotElsewhereConstraint on col9
+188: Cell(9, 8) CANT_BE 1 HereThenNotElsewhereConstraint on col9
+189: Cell(9, 7) CANT_BE 6 HereThenNotElsewhereConstraint on col9
+190: Cell(9, 8) CANT_BE 6 HereThenNotElsewhereConstraint on col9
+191: Cell(9, 1) CANT_BE 4 HereThenNotElsewhereConstraint on col9
+192: Cell(9, 7) CANT_BE 4 HereThenNotElsewhereConstraint on col9
+193: Cell(9, 7) CANT_BE 5 HereThenNotElsewhereConstraint on col9
+194: Cell(9, 8) CANT_BE 4 HereThenNotElsewhereConstraint on col9
+195: Cell(9, 8) CANT_BE 5 HereThenNotElsewhereConstraint on col9
+196: Cell(9, 7) CANT_BE 9 HereThenNotElsewhereConstraint on col9
+197: Cell(9, 8) CANT_BE 9 HereThenNotElsewhereConstraint on col9
+198: Cell(9, 1) CANT_BE 8 HereThenNotElsewhereConstraint on col9
+199: Cell(9, 7) CANT_BE 8 HereThenNotElsewhereConstraint on col9
+200: Cell(9, 8) CANT_BE 8 HereThenNotElsewhereConstraint on col9
+201: Cell(2, 1) CANT_BE 2 HereThenNotElsewhereConstraint on row1
+202: Cell(3, 1) CANT_BE 2 HereThenNotElsewhereConstraint on row1
+203: Cell(4, 1) CANT_BE 2 HereThenNotElsewhereConstraint on row1
+204: Cell(5, 1) CANT_BE 2 HereThenNotElsewhereConstraint on row1
+205: Cell(6, 1) CANT_BE 2 HereThenNotElsewhereConstraint on row1
+206: Cell(7, 1) CANT_BE 2 HereThenNotElsewhereConstraint on row1
+207: Cell(8, 1) CANT_BE 2 HereThenNotElsewhereConstraint on row1
+208: Cell(2, 2) CANT_BE 4 HereThenNotElsewhereConstraint on row2
+209: Cell(6, 2) CANT_BE 4 HereThenNotElsewhereConstraint on row2
+210: Cell(7, 2) CANT_BE 4 HereThenNotElsewhereConstraint on row2
+211: Cell(2, 2) CANT_BE 1 HereThenNotElsewhereConstraint on row2
+212: Cell(3, 2) CANT_BE 1 HereThenNotElsewhereConstraint on row2
+213: Cell(4, 2) CANT_BE 1 HereThenNotElsewhereConstraint on row2
+214: Cell(5, 2) CANT_BE 1 HereThenNotElsewhereConstraint on row2
+215: Cell(6, 2) CANT_BE 1 HereThenNotElsewhereConstraint on row2
+216: Cell(7, 2) CANT_BE 1 HereThenNotElsewhereConstraint on row2
+217: Cell(8, 2) CANT_BE 1 HereThenNotElsewhereConstraint on row2
+218: Cell(1, 3) CANT_BE 6 HereThenNotElsewhereConstraint on row3
+219: Cell(2, 3) CANT_BE 6 HereThenNotElsewhereConstraint on row3
+220: Cell(3, 3) CANT_BE 6 HereThenNotElsewhereConstraint on row3
+221: Cell(4, 3) CANT_BE 6 HereThenNotElsewhereConstraint on row3
+222: Cell(6, 3) CANT_BE 6 HereThenNotElsewhereConstraint on row3
+223: Cell(7, 3) CANT_BE 6 HereThenNotElsewhereConstraint on row3
+224: Cell(2, 5) CANT_BE 8 HereThenNotElsewhereConstraint on row5
+225: Cell(5, 5) CANT_BE 8 HereThenNotElsewhereConstraint on row5
+226: Cell(6, 5) CANT_BE 8 HereThenNotElsewhereConstraint on row5
+227: Cell(7, 5) CANT_BE 8 HereThenNotElsewhereConstraint on row5
+228: Cell(8, 5) CANT_BE 8 HereThenNotElsewhereConstraint on row5
+229: Cell(2, 5) CANT_BE 6 HereThenNotElsewhereConstraint on row5
+230: Cell(2, 5) CANT_BE 7 HereThenNotElsewhereConstraint on row5
+231: Cell(5, 5) CANT_BE 7 HereThenNotElsewhereConstraint on row5
+232: Cell(6, 5) CANT_BE 6 HereThenNotElsewhereConstraint on row5
+233: Cell(6, 5) CANT_BE 7 HereThenNotElsewhereConstraint on row5
+234: Cell(7, 5) CANT_BE 6 HereThenNotElsewhereConstraint on row5
+235: Cell(7, 5) CANT_BE 7 HereThenNotElsewhereConstraint on row5
+236: Cell(8, 5) CANT_BE 6 HereThenNotElsewhereConstraint on row5
+237: Cell(2, 6) CANT_BE 3 HereThenNotElsewhereConstraint on row6
+238: Cell(3, 6) CANT_BE 3 HereThenNotElsewhereConstraint on row6
+239: Cell(4, 6) CANT_BE 3 HereThenNotElsewhereConstraint on row6
+240: Cell(5, 6) CANT_BE 3 HereThenNotElsewhereConstraint on row6
+241: Cell(6, 6) CANT_BE 3 HereThenNotElsewhereConstraint on row6
+242: Cell(2, 6) CANT_BE 5 HereThenNotElsewhereConstraint on row6
+243: Cell(3, 6) CANT_BE 5 HereThenNotElsewhereConstraint on row6
+244: Cell(4, 6) CANT_BE 5 HereThenNotElsewhereConstraint on row6
+245: Cell(5, 6) CANT_BE 5 HereThenNotElsewhereConstraint on row6
+246: Cell(6, 6) CANT_BE 5 HereThenNotElsewhereConstraint on row6
+247: Cell(8, 6) CANT_BE 5 HereThenNotElsewhereConstraint on row6
+248: Cell(2, 6) CANT_BE 9 HereThenNotElsewhereConstraint on row6
+249: Cell(3, 6) CANT_BE 9 HereThenNotElsewhereConstraint on row6
+250: Cell(4, 6) CANT_BE 9 HereThenNotElsewhereConstraint on row6
+251: Cell(5, 6) CANT_BE 9 HereThenNotElsewhereConstraint on row6
+252: Cell(6, 6) CANT_BE 9 HereThenNotElsewhereConstraint on row6
+253: Cell(8, 6) CANT_BE 9 HereThenNotElsewhereConstraint on row6
+254: Cell(1, 7) CANT_BE 6 HereThenNotElsewhereConstraint on row7
+255: Cell(2, 7) CANT_BE 6 HereThenNotElsewhereConstraint on row7
+256: Cell(3, 7) CANT_BE 6 HereThenNotElsewhereConstraint on row7
+257: Cell(4, 7) CANT_BE 6 HereThenNotElsewhereConstraint on row7
+258: Cell(6, 7) CANT_BE 6 HereThenNotElsewhereConstraint on row7
+259: Cell(8, 7) CANT_BE 6 HereThenNotElsewhereConstraint on row7
+260: Cell(2, 7) CANT_BE 3 HereThenNotElsewhereConstraint on row7
+261: Cell(3, 7) CANT_BE 3 HereThenNotElsewhereConstraint on row7
+262: Cell(4, 7) CANT_BE 3 HereThenNotElsewhereConstraint on row7
+263: Cell(6, 7) CANT_BE 3 HereThenNotElsewhereConstraint on row7
+264: Cell(9, 7) CANT_BE 3 HereThenNotElsewhereConstraint on row7
+265: Cell(2, 9) CANT_BE 2 HereThenNotElsewhereConstraint on row9
+266: Cell(5, 9) CANT_BE 2 HereThenNotElsewhereConstraint on row9
+267: Cell(6, 9) CANT_BE 2 HereThenNotElsewhereConstraint on row9
+268: Cell(7, 9) CANT_BE 2 HereThenNotElsewhereConstraint on row9
+269: Cell(2, 9) CANT_BE 8 HereThenNotElsewhereConstraint on row9
+270: Cell(5, 9) CANT_BE 8 HereThenNotElsewhereConstraint on row9
+271: Cell(6, 9) CANT_BE 8 HereThenNotElsewhereConstraint on row9
+272: Cell(7, 9) CANT_BE 8 HereThenNotElsewhereConstraint on row9
+273: Cell(8, 9) CANT_BE 8 HereThenNotElsewhereConstraint on row9
+274: Cell(3, 1) CANT_BE 6 Multiplication = 12 on 
+275: Cell(4, 1) CANT_BE 6 Multiplication = 12 on 
+276: Cell(8, 1) CANT_BE 4 Division = 4 on 
+277: Cell(1, 3) CANT_BE 1 Subtraction = 2 on 
+278: Cell(1, 4) CANT_BE 1 Subtraction = 2 on 
+279: Cell(1, 4) CANT_BE 6 Subtraction = 2 on 
+280: Cell(5, 5) CANT_BE 9 Subtraction = 1 on 
+281: Cell(6, 5) CANT_BE 9 Subtraction = 1 on 
+282: Cell(7, 5) CANT_BE 9 Addition = 13 on 
+283: Cell(8, 5) CANT_BE 9 Addition = 13 on 
+284: Cell(8, 7) CANT_BE 9 Addition = 13 on 
+285: Cell(2, 6) CANT_BE 1 Subtraction = 2 on 
+286: Cell(2, 6) CANT_BE 7 Subtraction = 2 on 
+287: Cell(3, 6) CANT_BE 1 Subtraction = 2 on 
+288: Cell(3, 6) CANT_BE 7 Subtraction = 2 on 
+289: Cell(6, 6) CANT_BE 1 Subtraction = 2 on 
+290: Cell(6, 6) CANT_BE 8 Subtraction = 2 on 
+291: Cell(6, 7) CANT_BE 1 Subtraction = 2 on 
+292: Cell(6, 7) CANT_BE 7 Subtraction = 2 on 
+293: Cell(9, 7) CANT_BE 2 Subtraction = 4 on 
+294: Cell(9, 8) CANT_BE 2 Subtraction = 4 on 
+295: Cell(9, 8) CANT_BE 7 Subtraction = 4 on 
+296: Cell(2, 8) CANT_BE 2 Addition = 10 on 
+297: Cell(2, 8) CANT_BE 8 Addition = 10 on 
+298: Cell(6, 9) CANT_BE 1 Subtraction = 2 on 
+299: Cell(8, 6) CANT_BE 8 HereThenNotElsewhereConstraint on col8
+300: Cell(8, 7) CANT_BE 8 HereThenNotElsewhereConstraint on col8
+301: Cell(8, 8) CANT_BE 8 HereThenNotElsewhereConstraint on col8
+302: Cell(8, 5) CANT_BE 5 HereThenNotElsewhereConstraint on col8
+303: Cell(8, 7) CANT_BE 5 HereThenNotElsewhereConstraint on col8
+304: Cell(8, 6) MUST_BE 6 NotElsewhereThenHereConstraint on col8
+305: Cell(2, 1) CANT_BE 3 HereThenNotElsewhereConstraint on row1
+306: Cell(2, 1) CANT_BE 4 HereThenNotElsewhereConstraint on row1
+307: Cell(5, 1) CANT_BE 3 HereThenNotElsewhereConstraint on row1
+308: Cell(5, 1) CANT_BE 4 HereThenNotElsewhereConstraint on row1
+309: Cell(6, 1) CANT_BE 3 HereThenNotElsewhereConstraint on row1
+310: Cell(6, 1) CANT_BE 4 HereThenNotElsewhereConstraint on row1
+311: Cell(7, 1) CANT_BE 4 HereThenNotElsewhereConstraint on row1
+312: Cell(2, 1) CANT_BE 8 HereThenNotElsewhereConstraint on row1
+313: Cell(5, 1) CANT_BE 8 HereThenNotElsewhereConstraint on row1
+314: Cell(6, 1) CANT_BE 8 HereThenNotElsewhereConstraint on row1
+315: Cell(7, 1) CANT_BE 8 HereThenNotElsewhereConstraint on row1
+316: Cell(2, 5) MUST_BE 9 NotElsewhereThenHereConstraint on row5
+317: Cell(2, 6) CANT_BE 6 HereThenNotElsewhereConstraint on row6
+318: Cell(3, 6) CANT_BE 6 HereThenNotElsewhereConstraint on row6
+319: Cell(4, 6) CANT_BE 6 HereThenNotElsewhereConstraint on row6
+320: Cell(6, 6) CANT_BE 6 HereThenNotElsewhereConstraint on row6
+321: Cell(1, 7) CANT_BE 7 HereThenNotElsewhereConstraint on row7
+322: Cell(2, 7) CANT_BE 7 HereThenNotElsewhereConstraint on row7
+323: Cell(3, 7) CANT_BE 7 HereThenNotElsewhereConstraint on row7
+324: Cell(4, 7) CANT_BE 7 HereThenNotElsewhereConstraint on row7
+325: Cell(2, 8) CANT_BE 3 HereThenNotElsewhereConstraint on row8
+326: Cell(3, 8) CANT_BE 3 HereThenNotElsewhereConstraint on row8
+327: Cell(4, 8) CANT_BE 3 HereThenNotElsewhereConstraint on row8
+328: Cell(5, 8) CANT_BE 3 HereThenNotElsewhereConstraint on row8
+329: Cell(6, 8) CANT_BE 3 HereThenNotElsewhereConstraint on row8
+330: Cell(7, 5) CANT_BE 2 Addition = 13 on 
+331: Cell(7, 5) CANT_BE 4 Addition = 13 on 
+332: Cell(2, 6) CANT_BE 8 Subtraction = 2 on 
+333: Cell(3, 6) CANT_BE 8 Subtraction = 2 on 
+334: Cell(6, 7) CANT_BE 8 Subtraction = 2 on 
+335: Cell(2, 9) CANT_BE 7 Addition = 10 on 
+336: Cell(7, 8) CANT_BE 9 Multiplication = 360 on 
+337: Cell(2, 1) CANT_BE 9 HereThenNotElsewhereConstraint on col2
+338: Cell(2, 2) CANT_BE 9 HereThenNotElsewhereConstraint on col2
+339: Cell(2, 3) CANT_BE 9 HereThenNotElsewhereConstraint on col2
+340: Cell(2, 4) CANT_BE 9 HereThenNotElsewhereConstraint on col2
+341: Cell(2, 7) CANT_BE 9 HereThenNotElsewhereConstraint on col2
+342: Cell(2, 8) CANT_BE 9 HereThenNotElsewhereConstraint on col2
+343: Cell(2, 9) CANT_BE 9 HereThenNotElsewhereConstraint on col2
+344: Cell(7, 1) CANT_BE 1 HereThenNotElsewhereConstraint on col7
+345: Cell(7, 3) CANT_BE 1 HereThenNotElsewhereConstraint on col7
+346: Cell(7, 4) CANT_BE 1 HereThenNotElsewhereConstraint on col7
+347: Cell(7, 9) CANT_BE 1 HereThenNotElsewhereConstraint on col7
+348: Cell(7, 2) CANT_BE 8 HereThenNotElsewhereConstraint on col7
+349: Cell(7, 3) CANT_BE 8 HereThenNotElsewhereConstraint on col7
+350: Cell(7, 4) CANT_BE 8 HereThenNotElsewhereConstraint on col7
+351: Cell(5, 5) CANT_BE 1 HereThenNotElsewhereConstraint on row5
+352: Cell(6, 5) CANT_BE 1 HereThenNotElsewhereConstraint on row5
+353: Cell(4, 6) CANT_BE 2 HereThenNotElsewhereConstraint on row6
+354: Cell(4, 6) CANT_BE 4 HereThenNotElsewhereConstraint on row6
+355: Cell(5, 6) CANT_BE 2 HereThenNotElsewhereConstraint on row6
+356: Cell(5, 6) CANT_BE 4 HereThenNotElsewhereConstraint on row6
+357: Cell(6, 6) CANT_BE 2 HereThenNotElsewhereConstraint on row6
+358: Cell(6, 6) CANT_BE 4 HereThenNotElsewhereConstraint on row6
+359: Cell(4, 6) CANT_BE 7 HereThenNotElsewhereConstraint on row6
+360: Cell(5, 6) CANT_BE 7 HereThenNotElsewhereConstraint on row6
+361: Cell(3, 8) CANT_BE 8 HereThenNotElsewhereConstraint on row8
+362: Cell(4, 8) CANT_BE 8 HereThenNotElsewhereConstraint on row8
+363: Cell(5, 8) CANT_BE 8 HereThenNotElsewhereConstraint on row8
+364: Cell(6, 8) CANT_BE 8 HereThenNotElsewhereConstraint on row8
+365: Cell(6, 3) CANT_BE 1 Multiplication = 72 on 
+366: Cell(6, 3) CANT_BE 8 Multiplication = 72 on 
+367: Cell(3, 4) CANT_BE 1 Addition = 28 on 
+368: Cell(4, 4) CANT_BE 1 Addition = 28 on 
+369: Cell(4, 7) CANT_BE 2 Addition = 21 on 
+370: Cell(4, 7) CANT_BE 9 Addition = 21 on 
+371: Cell(4, 8) CANT_BE 2 Addition = 21 on 
+372: Cell(4, 8) CANT_BE 5 Addition = 21 on 
+373: Cell(4, 8) CANT_BE 6 Addition = 21 on 
+374: Cell(4, 8) CANT_BE 9 Addition = 21 on 
+375: Cell(6, 7) CANT_BE 2 Subtraction = 2 on 
+376: Cell(6, 7) CANT_BE 4 Subtraction = 2 on 
+377: Cell(2, 8) CANT_BE 1 Addition = 10 on 
+378: Cell(2, 9) CANT_BE 1 Addition = 10 on 
+379: Cell(6, 9) CANT_BE 3 Subtraction = 2 on 
+380: Cell(5, 6) MUST_BE 8 NotElsewhereThenHereConstraint on col5
+381: Cell(6, 1) CANT_BE 7 HereThenNotElsewhereConstraint on col6
+382: Cell(6, 2) CANT_BE 7 HereThenNotElsewhereConstraint on col6
+383: Cell(6, 8) CANT_BE 7 HereThenNotElsewhereConstraint on col6
+384: Cell(6, 9) CANT_BE 7 HereThenNotElsewhereConstraint on col6
+385: Cell(6, 2) MUST_BE 8 NotElsewhereThenHereConstraint on col6
+386: Cell(2, 2) CANT_BE 8 HereThenNotElsewhereConstraint on row2
+387: Cell(4, 6) CANT_BE 8 HereThenNotElsewhereConstraint on row6
+388: Cell(4, 7) CANT_BE 1 Addition = 21 on 
+389: Cell(4, 7) CANT_BE 4 Addition = 21 on 
+390: Cell(4, 8) CANT_BE 1 Addition = 21 on 
+391: Cell(7, 9) CANT_BE 9 Subtraction = 2 on 
+392: Cell(4, 3) CANT_BE 1 HereThenNotElsewhereConstraint on col4
+393: Cell(4, 9) CANT_BE 1 HereThenNotElsewhereConstraint on col4
+394: Cell(3, 9) CANT_BE 9 Multiplication = 9 on 
+

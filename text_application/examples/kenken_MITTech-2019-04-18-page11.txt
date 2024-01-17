@@ -1,0 +1,37 @@
+
+aabbcccdd
+4aeeeccf1
+gahheiif6
+gjjjkkifl
+8jmmnnool
+3ppqqr5o9
+sssq6r3ot
+susqvvwwt
+2uxxvyyw8
+
+a: 17+
+b: 12*
+c: 31+
+d: 4/
+e: 270*
+f: 21*
+g: 2-
+h: 1-
+i: 72*
+j: 28+
+k: 5+
+l: 20*
+m: 42*
+n: 1-
+o: 13+
+p: 2-
+q: 21+
+r: 2-
+s: 23+
+t: 4-
+u: 10+
+v: 10+
+w: 360*
+x: 9*
+y: 2-
+
