@@ -1,0 +1,16 @@
+# "Binary Fusion" by Shye
+# From https://app.crackingthecryptic.com/rJDLMnH7LB
+
+--5 -2- 6--
+-9- --4 -1-
+2-- 5-- --3
+
+--6 -3- ---
+--- 8-1 ---
+--- -9- 4--
+
+3-- --2 --7
+-1- 9-- -5-
+--4 -6- 8--
+
+
