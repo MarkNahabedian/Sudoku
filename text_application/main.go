@@ -102,7 +102,9 @@ func main() {
 
 	puzzle, err := puzzle_type.Value.Parser(puzzle_string)
 	if err != nil {
-		fmt.Printf("%s\n", puzzle_string)
+		border := strings.Repeat("=", 30)
+		fmt.Printf("%s\n%s\n%s\n",
+			border, puzzle_string, border)
 		fail(err)
 	}
 
@@ -122,10 +124,8 @@ func main() {
 
 	// Solve it
 	if err := puzzle.DoConstraints(); err != nil {
-		fail(fmt.Errorf("Error during DoConstraints: %s", err.Error()))
-	}
-	if err != nil {
-		fail(fmt.Errorf("Error while solving: %s", err))
+		puzzle.ShowJustifications()
+		fail(fmt.Errorf("Error while solving: %s", err.Error()))
 	}
 
 	// Write the answer
