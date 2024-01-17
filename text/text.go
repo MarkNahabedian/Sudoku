@@ -30,6 +30,7 @@ func TextToSudoku(text string) (*base.Puzzle, error) {
 		if any {
 			row += 1
 			column = 1
+			any = false
 		}
 		linenumber += 1
 		linecharnumber = 0
@@ -48,7 +49,7 @@ func TextToSudoku(text string) (*base.Puzzle, error) {
 		case '#':
 			comment = true
 			break
-		case ' ', '\t':
+		case ' ', '\t', '\r':
 			// Ignore
 			break
 		case '\n':
@@ -56,8 +57,8 @@ func TextToSudoku(text string) (*base.Puzzle, error) {
 			break
 		case '1', '2', '3', '4', '5', '6', '7', '8', '9':
 			if row > 9 || column > 9 {
-				return p, fmt.Errorf("row or column index overflow: row %d, column %d",
-					row, column)
+				return p, fmt.Errorf("row or column index overflow: row %d, column %d, lind %d, character %d",
+					row, column, linenumber, linecharnumber)
 			}
 			value := int(c - '0')
 			p.Cell(column, row).MustBe(value, base.Given, nil)
@@ -67,8 +68,8 @@ func TextToSudoku(text string) (*base.Puzzle, error) {
 			column += 1
 			break
 		default:
-			return p, fmt.Errorf("invalid input character '%c': line %d, character %d",
-				c, linenumber, linecharnumber)
+			return p, fmt.Errorf("invalid input character at line %d, character %d: 0x%02x",
+				linenumber, linecharnumber, int(c))
 		}
 	}
 
@@ -171,7 +172,7 @@ func TextToKenKen(text string) (*base.Puzzle, error) {
 		case '#':
 			comment = true
 			break
-		case ' ', '\t':
+		case ' ', '\t', '\r':
 			// Ignore
 			break
 		case '\n':
