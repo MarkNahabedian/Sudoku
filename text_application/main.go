@@ -122,19 +122,30 @@ func main() {
 	// First write the original unsolved puzzle.
 	out.WriteString(puzzle_string)
 
+	pre_solve_value_count := puzzle.ValueCount()
+
 	// Solve it
-	if err := puzzle.DoConstraints(); err != nil {
-		puzzle.ShowJustifications()
-		fail(fmt.Errorf("Error while solving: %s", err.Error()))
-	}
+	err = puzzle.DoConstraints()
 
 	// Write the answer
 	puzzle.Show(out)
 
+	if !puzzle.IsSolved() {
+		fmt.Printf("Progress: %d %d %d %d\n\n",
+			puzzle.MaxValueCount(),
+			pre_solve_value_count,
+			puzzle.ValueCount(),
+			puzzle.SolvedValueCount())
+	}
+	
 	// Write the justifications.
 	for _, j := range puzzle.Justifications {
 		out.WriteString(j.Pretty())
 		out.WriteString("\n")
+	}
+
+	if err != nil {
+		fail(fmt.Errorf("Error while solving: %s", err.Error()))
 	}
 }
 
