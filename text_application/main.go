@@ -125,7 +125,7 @@ func main() {
 	pre_solve_value_count := puzzle.ValueCount()
 
 	// Solve it
-	err = puzzle.DoConstraints()
+	err = puzzle.GuessSolve()
 
 	// Write the answer
 	puzzle.Show(out)
