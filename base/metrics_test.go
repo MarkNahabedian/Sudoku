@@ -27,25 +27,8 @@ func TestMetrics(t *testing.T) {
 		t.Errorf("After 9 givens, value count should be %d, but is %d", want, got)
 	}
 
-	// Force solve the puzzle
-	for {
-		if err := puzzle.DoConstraints(); err != nil {
-			t.Fatalf("Error during DoConstraints: %s", err.Error())
-		}
-		if puzzle.IsSolved() {
-			break
-		}
-		// Find a cell that isn't solved and pick a possible
-		// value for it:
-		for _, cell := range puzzle.Grid {
-			if s, _ := cell.IsSolved(); !s {
-				cell.Possibilities.DoValues(
-					func(value int) bool {
-						given(cell.X, cell.Y, value)
-						return false})
-				break
-			}
-		}
+	if err := puzzle.GuessSolve(); err != nil {
+		t.Errorf("Error while guessing %s", err.Error())
 	}
 	
 	if want, got := puzzle.SolvedValueCount(), puzzle.ValueCount(); got != want {
