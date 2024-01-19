@@ -144,7 +144,7 @@ func (p *Puzzle) Show(f io.Writer) {
 			if b, v := c.IsSolved(); b {
 				fmt.Fprintf(f, "  %d  ", v)
 			} else {
-				fmt.Fprintf(f, " %03x ", c.Possibilities)
+				fmt.Fprintf(f, " %03o ", c.Possibilities)
 			}
 		}
 		fmt.Fprintf(f, "\n")
